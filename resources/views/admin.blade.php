@@ -45,7 +45,7 @@
       </div>      
 @endsection
 @section('scripts')
-<script>
+{{-- <script>
     $(document).ready(function(){
         $('#btn-create').click(function(){
             var itemname = $("#item-name").val();
@@ -65,5 +65,5 @@
             })
         })
     })
-</script>
+</script> --}}
 @endsection
