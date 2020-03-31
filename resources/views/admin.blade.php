@@ -9,12 +9,15 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="addForm">Modal title</h5>
+              <h5 class="modal-title" id="addForm">Add Item</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
+              <div class="img" style="margin-left: 40%">
+                <img src="{{asset('img/Add.ico')}}">
+               </div>
               <div id="addItem">
                 <form id="form">
                     <div class="form-group">
@@ -52,17 +55,17 @@
 @section('scripts')
 <script>
     $(document).ready(function(){
-        $.ajax({
-          type: "GET",
-          url: "{{ route('getitem') }}",
-          dataType: 'json',
-          data: {
-            items
-          },
-          success: function(res){
-            console.log(res->items);
-          }
-        }),
+        // $.ajax({
+        //   type: "GET",
+        //   url: "{{ route('getitem') }}",
+        //   dataType: 'json',
+        //   data: {
+        //     items
+        //   },
+        //   success: function(res){
+        //     console.log();
+        //   }
+        // }),
         $('#btn-create').click(function(e){
             e.preventDefault();
             var itemname = $("#item-name").val();

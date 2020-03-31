@@ -63,7 +63,10 @@ nav,
 section {
   display: block;
 }
-
+.img img{
+  height: 100px; 
+  width: 100px;
+}
 body {
   margin: 0;
   font-family: "Nunito", sans-serif;
