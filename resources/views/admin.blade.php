@@ -62,7 +62,7 @@
             <tbody>
             </tbody>
           </table>  
-      </div>
+        </div>
     </div>
 @endsection
 @section('scripts')
@@ -86,11 +86,12 @@
                 data: fd,
                 processData: false,
                 contentType: false,
-                cache: false,
                 success: function(data){
                     console.log(data);
-                    this.reset();
-                    window.location.href="/admin";
+                    
+                },
+                error: function(data){
+                  console.log(data.responseJSON.errors);
                 }
           });
         }),

@@ -23,20 +23,17 @@ class ItemController extends Controller
             $newItem->item_desc = $request->desc;
             $newItem->item_price = $request->price;
             $newItem->item_stock = $request->stock;
-            if ($file = $request->file('image')) {
-                // $image = $request->image->store('public/images');
-                $file->move(base_path('/images'), $file->getClientOriginalName());
-                $newItem->item_image = $file;
+            if ($file = $request->image) {
+                $des = "images";
+                $filename = rand().".".$file->getClientOriginalName();
+                $file->move(public_path($des), $filename);
+                $path = public_path().'/'.$des."/".$filename;
+                $newItem->item_image = $path;
                 $newItem->save();
-                return Response()->json([
-                    "success" => true,
-                    "image" => $image
-                ]);
+                return "Success";
             }else{
-                return Response()->json([
-                    "success" => false,
-                    "image" => ''
-            ]);
+                return "Failed";
             }
+            // return "hello";
     }
 }
