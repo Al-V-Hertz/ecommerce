@@ -84,8 +84,8 @@
   crossorigin="anonymous"></script>
 <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
 <script>
-    // $("table").DataTable();
-   $(document).ready(function(){
+    $('table').DataTable();
+    $(document).ready(function(){
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

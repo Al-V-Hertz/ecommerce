@@ -17,6 +17,7 @@ class CreateItemsTable extends Migration
             $table->id();
             $table->string('item_image')->nullable();
             $table->string('item_name');
+            $table->string('item_desc');
             $table->integer('item_stock');
             $table->float('item_price', 0, 2);
             $table->timestamps();

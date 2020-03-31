@@ -4,7 +4,6 @@
         <div class="header">
             <button class="btn btn-primary" data-toggle="modal" data-target="#addForm">Add an Item</button>
         </div>
-    </div>
     <div class="modal fade" id="addForm" tabindex="-1" role="dialog" aria-labelledby="addForm" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -16,25 +15,29 @@
             </div>
             <div class="modal-body">
               <div class="img" style="margin-left: 40%">
-                <img src="{{asset('img/Add.ico')}}">
+                <img id="img" src="{{asset('img/Add.ico')}}">
                </div>
               <div id="addItem">
-                <form id="form">
+                <form id="form" enctype="multipart/form-data">
                     <div class="form-group">
-                        <label for="item-image">Item Image:</label>
-                        <input type="file" class="form-control" id="item-image" name="item-image">
+                        <label for="item-image" style="display: none">Item Image:</label>
+                        <input type="file" class="form-control" id="item-image" name="image" style="display: none">
                       </div>
                     <div class="form-group">
                       <label for="item-name">Item Name:</label>
-                      <input type="text" class="form-control" id="item-name" name="item-name">
+                      <input type="text" class="form-control" id="item-name" name="name">
+                    </div>
+                    <div class="form-group">
+                      <label for="item-name">Item Description:</label>
+                      <textarea class="form-control" id="item-desc" name="desc"></textarea>
                     </div>
                     <div class="form-group">
                       <label for="item-price">Item Price:</label>
-                      <input type="number" class="form-control" id="item-price" name="item-price">
+                      <input type="number" class="form-control" id="item-price" name="price">
                     </div>
                     <div class="form-group">
                       <label for="item-stock">Stock</label>
-                      <input type="number" class="form-control" id="item-stock" name="item-stock">
+                      <input type="number" class="form-control" id="item-stock" name="stock">
                     </div>
                   </form>
               </div>
@@ -46,45 +49,57 @@
           </div>
         </div>
       </div>
+      <br>
       <div>
           <table>
-
+            <thead>
+              <th></th>
+              <th>Image</th>
+              <th>Item</th>
+              <th>Price</th>
+              <th>Stock</th>
+            </thead>
+            <tbody>
+            </tbody>
           </table>  
-      </div>      
+      </div>
+    </div>
 @endsection
 @section('scripts')
 <script>
+  function preview(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            $('#img').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+     }
+  }
     $(document).ready(function(){
-        // $.ajax({
-        //   type: "GET",
-        //   url: "{{ route('getitem') }}",
-        //   dataType: 'json',
-        //   data: {
-        //     items
-        //   },
-        //   success: function(res){
-        //     console.log();
-        //   }
-        // }),
-        $('#btn-create').click(function(e){
-            e.preventDefault();
-            var itemname = $("#item-name").val();
-            var itemprice = $("#item-price").val();
-            var itemstock  = $("#item-stock").val();
-            $.ajax({
+        $('#form').submit(function(e){
+          e.preventDefault();
+          var fd = new FormData(this);
+          $.ajax({
                 type: "POST",
                 url: "{{ route('additem') }}",
-                data: {
-                    itemname,
-                    itemprice,
-                    itemstock
-                },
-                success: function(){
-                    alert('Item Added Successfully');
+                data: fd,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function(data){
+                    console.log(data);
+                    this.reset();
                     window.location.href="/admin";
                 }
-            })
-        })
+          });
+        }),
+        $('#img').click(function(){
+          $("#item-image").click();
+        }),
+        $('#item-image').change(function(){
+          preview(this);
+        });
     })
 </script>
 @endsection
