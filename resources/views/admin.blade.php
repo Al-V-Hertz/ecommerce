@@ -45,7 +45,7 @@
       </div>      
 @endsection
 @section('scripts')
-{{-- <script>
+<script>
     $(document).ready(function(){
         $('#btn-create').click(function(){
             var itemname = $("#item-name").val();
@@ -53,17 +53,17 @@
             var itemnstock  = $("#item-stock").val();
             $.ajax({
                 type: "POST",
-                url: "{{ route('addItem') }}",
+                url: "{{ route('additem') }}",
                 data: {
                     itemname,
                     itemprice,
                     itemstock
                 },
                 success: function(){
-                    alert("Item was added");
+                    window.location.href="/admin";
                 }
             })
         })
     })
-</script> --}}
+</script>
 @endsection
