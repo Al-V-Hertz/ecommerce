@@ -81,7 +81,7 @@
           e.preventDefault();
           var fd = new FormData(this);
           $.ajax({
-                type: "POST",
+                type: 'POST',
                 url: "{{ route('additem') }}",
                 data: fd,
                 processData: false,

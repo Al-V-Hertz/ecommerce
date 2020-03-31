@@ -31,12 +31,12 @@ class ItemController extends Controller
                 return Response()->json([
                     "success" => true,
                     "image" => $image
-                ])
+                ]);
             }else{
                 return Response()->json([
                     "success" => false,
                     "image" => ''
-            ])
+            ]);
             }
     }
 }
