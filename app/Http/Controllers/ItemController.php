@@ -5,10 +5,10 @@ use App\Item;
 use Illuminate\Http\Request;
 class ItemController extends Controller
 {
-    // public function index(){
-    //     $allItems = Item::all();
-    //     return 
-    // }
+    public function index(){
+        $allItems = Item::all();
+        return redirect()->route('admin', compact('items', $allItems));
+    }
 
     public function store(Request $request){
         $newItem = new Item();

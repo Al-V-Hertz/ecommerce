@@ -42,11 +42,27 @@
             </div>
           </div>
         </div>
+      </div>
+      <div>
+          <table>
+
+          </table>  
       </div>      
 @endsection
 @section('scripts')
 <script>
     $(document).ready(function(){
+        $.ajax({
+          type: "GET",
+          url: "{{ route('getitem') }}",
+          dataType: 'json',
+          data: {
+            items
+          },
+          success: function(res){
+            console.log(res->items);
+          }
+        }),
         $('#btn-create').click(function(e){
             e.preventDefault();
             var itemname = $("#item-name").val();
@@ -61,6 +77,7 @@
                     itemstock
                 },
                 success: function(){
+                    alert('Item Added Successfully');
                     window.location.href="/admin";
                 }
             })
