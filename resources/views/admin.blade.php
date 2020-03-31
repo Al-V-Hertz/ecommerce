@@ -47,10 +47,11 @@
 @section('scripts')
 <script>
     $(document).ready(function(){
-        $('#btn-create').click(function(){
+        $('#btn-create').click(function(e){
+            e.preventDefault();
             var itemname = $("#item-name").val();
             var itemprice = $("#item-price").val();
-            var itemnstock  = $("#item-stock").val();
+            var itemstock  = $("#item-stock").val();
             $.ajax({
                 type: "POST",
                 url: "{{ route('additem') }}",
