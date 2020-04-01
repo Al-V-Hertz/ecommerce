@@ -155,6 +155,8 @@
                 success: function(data){
                     console.log("New item : "+data);
                     table.ajax.reload();
+                    $('#addForm').modal('toggle');
+                    $(this).reset();
                 },
                 error: function(data){
                   console.log(data.responseJSON.errors);
@@ -202,7 +204,6 @@
               })
             })
         }),
-        
         $('#img').click(function(){
           $("#item-image").click();
         }),
