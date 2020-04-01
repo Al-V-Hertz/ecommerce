@@ -58,6 +58,7 @@
               <th>Item</th>
               <th>Price</th>
               <th>Stock</th>
+              <th>Action</th>
             </thead>
             <tbody>
             </tbody>
@@ -77,7 +78,16 @@
      }
   }
     $(document).ready(function(){
-        $('#form').submit(function(e){
+          $.ajax({
+            type: 'GET',
+            url: "{{ route('getitem') }}",
+            data: 
+            success: function(data){
+              console.log(data.result);
+            }
+            
+          }),
+          $('#form').submit(function(e){
           e.preventDefault();
           var fd = new FormData(this);
           $.ajax({
@@ -88,7 +98,7 @@
                 contentType: false,
                 success: function(data){
                     console.log(data);
-                    
+                    window.location.href ='/admin';
                 },
                 error: function(data){
                   console.log(data.responseJSON.errors);

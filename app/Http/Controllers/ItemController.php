@@ -7,7 +7,7 @@ class ItemController extends Controller
 {
     public function index(){
         $allItems = Item::all();
-        return redirect()->route('admin', compact('items', $allItems));
+        return $allItems;
     }
 
     public function store(Request $request){
