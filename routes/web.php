@@ -10,6 +10,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/admin', 'AdminController@index')->name('admin');
-Route::post('/additem', 'ItemController@store')->name('additem');
 Route::get('/getitem', 'ItemController@index')->name('getitem');
-
+Route::post('/additem', 'ItemController@store')->name('additem');
+Route::get('/get', 'ItemController@get')->name('get');
+Route::post('/updateitem', "ItemController@update")->name('updateitem');
