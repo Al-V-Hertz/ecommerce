@@ -14,7 +14,7 @@ class ItemController extends Controller
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
                            $btn ="<button id = '$row->id' class='btn btn-primary edit'>Edit</button>";
-                           $btn= $btn."  <a href='/delitem' id='$row->id' class='btn btn-danger'>Delete</a>";
+                           $btn= $btn."  <button id='$row->id' class='btn btn-danger delete'>Delete</button>";
                            return $btn;
                     })
                     ->rawColumns(['action'])
@@ -24,13 +24,14 @@ class ItemController extends Controller
 
     public function store(Request $request)
     {
-            request()->validate([
-                'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-                'name' => 'required',
-                'price' => 'required|min: 1',
-                'stock' => 'required|min: 0',
-                'desc' => 'required'
-            ]);
+            // request()->validate([
+            //     'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            //     'name' => 'required',
+            //     'price' => 'required|min: 1',
+            //     'stock' => 'required|min: 0',
+            //     'desc' => 'required'
+            // ]);
+
             $newItem = new Item();
             $newItem->item_name = $request->name;
             $newItem->item_desc = $request->desc;
@@ -43,14 +44,12 @@ class ItemController extends Controller
                 $path = $des."/".$filename;
                 $newItem->item_image = $path;
                 $newItem->save();
-                // Item::updateOrCreate(['id' => $request->editid],
-                // ['item_name' => $request->name, 'item_image' => $path, 'item_price' => $request->price, 'item_stock' => $request->stock]);
                 return "Success";
             }else{
                 return "Failed";
             }
     }
-    
+
     public function get(Request $request)
     {
         $data = Item::find($request->id);
@@ -59,20 +58,26 @@ class ItemController extends Controller
 
     public function update(Request $request)
     {
-        $updItem = Item::find($request->id);
-        if(!empty($request->image)){
+        $updItem = Item::find($request->uid);
+        if(!empty($request->uimage)){
             $des = "images";
             $filename = rand().".".$file->getClientOriginalName();
             $file->move(public_path($des), $filename);
             $path = $des."/".$filename;
             $updItem->item_image = $path;
         }
-        $updItem->item_name = $request->name;
-        $updItem->item_desc = $request->desc;
-        $updItem->item_price = $request->price;
-        $updItem->item_stock = $request->stock; 
+        $updItem->item_name = $request->uname;
+        $updItem->item_desc = $request->udesc;
+        $updItem->item_price = $request->uprice;
+        $updItem->item_stock = $request->ustock; 
         $updItem->save();
+        return "success?";
+    }
 
-        return $updItem;
+    public function destroy(Request $request)
+    {
+        Item::find($request->id)->delete();
+     
+        return response()->json(['success'=>'Product deleted successfully.']);
     }
 }

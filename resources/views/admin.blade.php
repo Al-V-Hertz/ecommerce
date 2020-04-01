@@ -68,30 +68,31 @@
                    </div>
                     <div class="form-group">
                         <label for="item-image" style="display: none">Item Image:</label>
-                        <input type="file" class="form-control" id="upd-image" name="image" style="display: none">
+                        <input type="file" class="form-control" id="upd-image" name="uimage" style="display: none">
+                        <input type="text" name="uid" id="uid" style="display: none">
                       </div>
                     <div class="form-group">
                       <label for="item-name">Item Name:</label>
-                      <input type="text" class="form-control" id="upd-name" name="name">
+                      <input type="text" class="form-control" id="upd-name" name="uname">
                     </div>
                     <div class="form-group">
                       <label for="item-name">Item Description:</label>
-                      <textarea class="form-control" id="upd-desc" name="desc"></textarea>
+                      <textarea class="form-control" id="upd-desc" name="udesc"></textarea>
                     </div>
                     <div class="form-group">
                       <label for="item-price">Item Price:</label>
-                      <input type="number" class="form-control" id="upd-price" name="price">
+                      <input type="number" class="form-control" id="upd-price" name="uprice">
                     </div>
                     <div class="form-group">
                       <label for="item-stock">Stock</label>
-                      <input type="number" class="form-control" id="upd-stock" name="stock">
+                      <input type="number" class="form-control" id="upd-stock" name="ustock">
                     </div>
                   </form>
               </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-success" form="form" id="btn-update">Update</button>
+              <button type="submit" class="btn btn-success" form="upd-form" id="btn-update">Update</button>
             </div>
           </div>
         </div>
@@ -101,7 +102,6 @@
           <table id="table">
             <thead>
               <th></th>
-              {{-- <th>Image</th> --}}
               <th>Item</th>
               <th>Description</th>
               <th>Price</th>
@@ -133,7 +133,6 @@
             ajax: "{{ route('getitem') }}",
             columns: [
                 {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-                // {data: 'item_image', name: 'timage'},
                 {data: 'item_name', name: 'tname'},
                 {data: 'item_desc', name: 'tdesc'},
                 {data: 'item_price', name: 'tprice'},
@@ -150,60 +149,83 @@
                 type: 'POST',
                 url: "{{ route('additem') }}",
                 data: fd,
+                cache: false,
                 processData: false,
                 contentType: false,
                 success: function(data){
                     console.log("New item : "+data);
                     table.ajax.reload();
-                    $('#addForm').modal('toggle');
-                    $(this).reset();
                 },
                 error: function(data){
                   console.log(data.responseJSON.errors);
                 }
-          })
+          });
+          $('#addForm').modal('hide');
+          this.reset();
         });
 
         //UPDATE//
-        $("#table").on('click', '.edit', function(e){
-          e.preventDefault();
+        $("#table").on('click', '.edit', function(){
+          // e.preventDefault();
           var edit_id = this.id;
           $.ajax({
                 type: 'GET',
                 url: "{{ route('get') }}",
                 data: {id: edit_id},
                 success: function(data){
-                    console.log(data);
+                    // console.log("Fetched: "+data);
+                    $('#uid').val(data.id);
                     $('#uimg').attr("src", data.item_image);
                     $('#upd-name').val(data.item_name);
                     $('#upd-desc').val(data.item_desc);
                     $('#upd-price').val(data.item_price);
                     $('#upd-stock').val(data.item_stock);
-                    $("#updForm").modal('toggle');
+                    $("#updForm").modal('show');
                 },
                 error: function(data){
                   console.log(data.responseJSON.errors);
                 }
-            }),
-            $('#upd-form').submit(function(){
-              var fd = new FormData(this);
+          });
+        });
+        $('#upd-form').submit(function(){
+          // e.preventDefault();
+              var formData = new FormData(this);
               $.ajax({
                 type: 'POST',
-                url: "{{ route('additem') }}",
-                data: {
-                  fd,
-                  id: edit_id
-                },
+                url: "{{route('updateitem')}}",
+                data: formData,
+                cache: false,
+                processData: false,
+                contentType: false,
                 success: function(data){
-                    console.log("Updated : "+data);
-                    table.ajax.reload();
+                    // console.log("Updated : "+data);
+                    // table.ajax.reload();
                 },
                 error: function(data){
                   console.log(data.responseJSON.errors);
                 }
-              })
-            })
-        }),
+              });
+              // this.reset();
+        });
+
+        //DELETE//
+        $("#table").on('click', '.delete', function(){
+          var del_id = this.id;
+          $.ajax({
+                type: 'DELETE',
+                url: "{{ route('delitem') }}",
+                data: {id: del_id},
+                success: function(data){
+                  console.log("Deleted "+data);
+                  table.ajax.reload();
+                },
+                error: function(data){
+                  console.log(data.responseJSON.errors);
+                }
+        })
+      });
+
+      //FILE CHANGE//
         $('#img').click(function(){
           $("#item-image").click();
         }),
