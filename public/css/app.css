@@ -67,6 +67,21 @@ section {
   height: 100px; 
   width: 100px;
 }
+#detimg{
+  align-content: center;
+  height: 10rem;
+  width: 10rem;
+}
+.card{
+  display: block;
+  width: 30%;
+  margin: 8px;
+  height: 26rem;
+  float: left;
+}
+.card-img-top{
+  height: 200px;
+}
 body {
   margin: 0;
   font-family: "Nunito", sans-serif;

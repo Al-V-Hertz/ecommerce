@@ -18,11 +18,6 @@ class ItemController extends Controller
                            return $btn;
                     })
                     ->rawColumns(['action'])
-                    // ->addColumn('image', function($row){
-                    //     $img = "<img src = '{{$row->item_image}}' />";
-                    //     return $img;
-                    // })
-                    // ->rawColumns(['image'])
                     ->make(true);
         }
     }
@@ -91,9 +86,17 @@ class ItemController extends Controller
         return response()->json(['success'=>'Product deleted successfully.']);
     }
 
+    //CLIENT SIDE//
     public function show()
     {
-        $cards = Item::all()->get();
-        return response()->json($cards);
+        $cards = Item::all();
+        return view('client', compact('cards'));
+    }
+    
+    public function details(Request $request)
+    {
+        $det = Item::find($request->id);
+        // dd($det);
+        return response()->json($det);
     }
 }

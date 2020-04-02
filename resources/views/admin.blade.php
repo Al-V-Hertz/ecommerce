@@ -190,7 +190,7 @@
                 error: function(data){
                   console.log(data.responseJSON.errors);
                 }
-          });
+            });
         });
         $('#upd-form').submit(function(){
               var formData = new FormData(this);

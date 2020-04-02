@@ -16,5 +16,6 @@ Route::get('/get', 'ItemController@get')->name('get');
 Route::post('/updateitem', "ItemController@update")->name('updateitem');
 Route::delete('/delitem', 'ItemController@destroy' )->name('delitem');
 
-Route::get("/client", "ClientController@index")->name('client');
-Route::get('/showitems', 'ItemController@show')->name('showitems');
+// Route::get("/client", "ClientController@index")->name('client');
+Route::get('/client', 'ItemController@show')->name('showitems');
+Route::get('/details', 'ItemController@details')->name('details');

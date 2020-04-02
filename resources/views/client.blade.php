@@ -4,7 +4,10 @@
     Launch demo modal
   </button> --}}
 <div class="container">
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="jumbotron">
+    <h2>Products</h2>
+  </div>
+    <div class="modal fade" id="details" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -15,38 +18,66 @@
             </div>
             <div class="modal-body">
               <form id="order">
-                <img src="" alt="Item-Image">
-                <h3></h3>
-                <p></p>
-                <input type="hidden" name="item-id">
-                <input type="number" name="qty" id="qty" min="1">
+                <img id="detimg" src="" alt="Item-Image">
+                <h3 id="dettitle"></h3>
+                <p id="dettext"></p>
+                <span id="stock"></span><br><span id="price"></span><br>
+                <label id="label" for="qty">Quantity </label>
+                <input type="number" name="qty" id="qty" min="1" style='width: 55px; padding: 3px' placeholder="Qty">
               </form>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" form="order">Add to Cart</button>
+              <button id="atc" type="button" class="btn btn-primary" form="order">Add to Cart</button>
             </div>
           </div>
         </div>
-      </div>
+    </div>
       <div class="items">
-          
+          @foreach ($cards as $card)
+          <div class="card">
+            <img class="card-img-top" src={{$card->item_image}} alt="Card image cap">
+            <div class="card-body">
+              <form class="addtocart">
+                <h5 class="card-title">{{$card->item_name}}</h5>
+                <p class="card-text">Price: Php {{$card->item_price}}</p>
+                <p class="card-text">Stock: {{$card->item_stock}}</p>
+                <a id={{$card->id}} class="btn btn-info detailbtn" data-toggle="modal" data-target="#details">Details</a>
+              </form>
+            </div>
+          </div>
+          @endforeach
       </div>
 </div>
 @endsection
 @section('scripts')
-    <script>
-        $(document).ready(function(){
-            $.ajax({
-                type: "GET",
-                route: "{{ route('showitems') }}",
-                success: function(data){
-                  console.log(data);
-                },
-                error: function(data){
-                  console.log(data.responseJSON.errors);
-                }
-            })
+  <script>
+    $(document).ready(function(){
+      $('.detailbtn').click(function(e){
+        e.preventDefault();
+        var get = this.id;
+        $.ajax({
+          type: 'GET',
+          url: "{{route('details')}}",
+          data: {id: get},
+          success: function(data){
+            $('#detimg').attr("src", data.item_image);
+            $('#dettitle').text(data.item_name);
+            $('#dettext').text(data.item_desc);
+            $('#price').text("Price: Php "+data.item_price);
+            $('#stock').text("Stock/s: "+data.item_stock);
+            $("#details").modal('show');
+            if(data.item_stock == 0){
+              $('#label').hide();
+              $('#qty').hide();
+              $('#atc').hide();
+            }
+          }, 
+          error: function(data){
+            console.log(data.responseJSON.errors);
+          }
         });
-    </script>
+      });
+    });
+  </script>
 @endsection
