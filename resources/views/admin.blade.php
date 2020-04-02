@@ -102,6 +102,7 @@
           <table id="table">
             <thead>
               <th></th>
+              <th>Image</th>
               <th>Item</th>
               <th>Description</th>
               <th>Price</th>
@@ -133,11 +134,14 @@
             ajax: "{{ route('getitem') }}",
             columns: [
                 {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                {data: 'item_image', name: 'timage', render: function(data, type, row){
+                  return "<img src = "+data+" width = '70', height= '70'/>";
+                }},
                 {data: 'item_name', name: 'tname'},
                 {data: 'item_desc', name: 'tdesc'},
                 {data: 'item_price', name: 'tprice'},
                 {data: 'item_stock', name: 'tstock'},
-                {data: 'action', name: 'action', orderable: false, searchable: false},
+                {data: 'action', name: 'action'},
             ]
           });
 
@@ -160,6 +164,7 @@
                   console.log(data.responseJSON.errors);
                 }
           });
+          $('#img').attr('src', 'img/Add.ico');
           $('#addForm').modal('hide');
           this.reset();
         });
@@ -188,7 +193,6 @@
           });
         });
         $('#upd-form').submit(function(){
-          // e.preventDefault();
               var formData = new FormData(this);
               $.ajax({
                 type: 'POST',
@@ -198,14 +202,15 @@
                 processData: false,
                 contentType: false,
                 success: function(data){
-                    // console.log("Updated : "+data);
-                    // table.ajax.reload();
+                    window.location.href = "/admin";
+                    console.log("Updated : "+data);
+                    table.ajax.reload();
                 },
                 error: function(data){
                   console.log(data.responseJSON.errors);
                 }
               });
-              // this.reset();
+              this.reset();
         });
 
         //DELETE//

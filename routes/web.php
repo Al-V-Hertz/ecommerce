@@ -17,3 +17,4 @@ Route::post('/updateitem', "ItemController@update")->name('updateitem');
 Route::delete('/delitem', 'ItemController@destroy' )->name('delitem');
 
 Route::get("/client", "ClientController@index")->name('client');
+Route::get('/showitems', 'ItemController@show')->name('showitems');

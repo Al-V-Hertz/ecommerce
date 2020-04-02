@@ -18,19 +18,24 @@ class ItemController extends Controller
                            return $btn;
                     })
                     ->rawColumns(['action'])
+                    // ->addColumn('image', function($row){
+                    //     $img = "<img src = '{{$row->item_image}}' />";
+                    //     return $img;
+                    // })
+                    // ->rawColumns(['image'])
                     ->make(true);
         }
     }
 
     public function store(Request $request)
     {
-            // request()->validate([
-            //     'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            //     'name' => 'required',
-            //     'price' => 'required|min: 1',
-            //     'stock' => 'required|min: 0',
-            //     'desc' => 'required'
-            // ]);
+            request()->validate([
+                'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'name' => 'required',
+                'price' => 'required|min: 1',
+                'stock' => 'required|min: 0',
+                'desc' => 'required'
+            ]);
 
             $newItem = new Item();
             $newItem->item_name = $request->name;
@@ -59,10 +64,11 @@ class ItemController extends Controller
     public function update(Request $request)
     {
         $updItem = Item::find($request->uid);
-        if(!empty($request->uimage)){
+        if($file = $request->uimage){
             $des = "images";
             $filename = rand().".".$file->getClientOriginalName();
             $file->move(public_path($des), $filename);
+            unlink($updItem->item_image);
             $path = $des."/".$filename;
             $updItem->item_image = $path;
         }
@@ -76,8 +82,18 @@ class ItemController extends Controller
 
     public function destroy(Request $request)
     {
-        Item::find($request->id)->delete();
-     
+        $del = Item::find($request->id);
+        if($del->item_image){
+            unlink($del->item_image);
+        }
+        $del->delete();
+    
         return response()->json(['success'=>'Product deleted successfully.']);
+    }
+
+    public function show()
+    {
+        $cards = Item::all()->get();
+        return response()->json($cards);
     }
 }
