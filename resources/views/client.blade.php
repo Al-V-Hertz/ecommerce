@@ -4,6 +4,7 @@
     Launch demo modal
   </button> --}}
 <div class="container">
+    <a href="/cart" class="btn btn-primary" style="margin-bottom: 10px; ">My Cart</a>
   <div class="jumbotron">
     <h2>Products</h2>
   </div>
@@ -17,8 +18,10 @@
               </button>
             </div>
             <div class="modal-body">
-              <form id="order">
+              <form id="order" action="/addtocart" method="POST" enctype="multipart/form-data">
+                @csrf 
                 <img id="detimg" src="" alt="Item-Image">
+                <input id="detid" type="hidden" name="hidden_id">
                 <h3 id="dettitle"></h3>
                 <p id="dettext"></p>
                 <span id="stock"></span><br><span id="price"></span><br>
@@ -28,7 +31,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button id="atc" type="button" class="btn btn-primary" form="order">Add to Cart</button>
+              <button id="atc" type="submit" form="order" class="btn btn-primary">Add to Cart</button>
             </div>
           </div>
         </div>
@@ -61,6 +64,7 @@
           url: "{{route('details')}}",
           data: {id: get},
           success: function(data){
+            $('#detid').val(data.id);
             $('#detimg').attr("src", data.item_image);
             $('#dettitle').text(data.item_name);
             $('#dettext').text(data.item_desc);
@@ -77,6 +81,9 @@
             console.log(data.responseJSON.errors);
           }
         });
+        $('#label').show();
+        $('#qty').show();
+        $('#atc').show();
       });
     });
   </script>

@@ -72,7 +72,7 @@ section {
   height: 10rem;
   width: 10rem;
 }
-.card{
+.items .card{
   display: block;
   width: 30%;
   margin: 8px;

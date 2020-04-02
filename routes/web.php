@@ -19,3 +19,5 @@ Route::delete('/delitem', 'ItemController@destroy' )->name('delitem');
 // Route::get("/client", "ClientController@index")->name('client');
 Route::get('/client', 'ItemController@show')->name('showitems');
 Route::get('/details', 'ItemController@details')->name('details');
+Route::post('/addtocart', 'OrderController@stage')->name('addtocart');
+Route::get('/cart', 'OrderController@show')->name('cart');
