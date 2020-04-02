@@ -72,6 +72,10 @@ section {
   height: 10rem;
   width: 10rem;
 }
+#orderimg{
+  width: 30px;
+  height: 30px;
+}
 .items .card{
   display: block;
   width: 30%;

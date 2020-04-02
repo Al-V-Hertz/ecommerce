@@ -11,19 +11,12 @@ class OrderController extends Controller
         $id = $request->input('hidden_id');
         $item = Item::find($id);
         $qty = $request->input('qty');
-        // if(!$request->session()->has('orders')){
         $request->session()->push('orders',['items' => $item, 'qty' => $qty]);
-            // $request->session()->push('orders.qty', $qty);
         return redirect('/client');
-        // }else{
-            // $request->session()->put('orders.item', $item);
-            // $request->session()->put('orders.qty', $qty);
-            // return redirect('/client');
-        // }
     }
-    public function show(Request $request){
+    public function index(Request $request){
         // $orders = $request->session()->get('orders');
-        // // dd($orders);
+        // dd($orders);
         // ->with("orders", compact($orders));
         return view('/cart');
     }

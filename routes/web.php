@@ -21,5 +21,5 @@ Route::group(["middleware" => "App\Http\Middleware\ClientCheck"], function(){
     Route::get('/client', 'ItemController@show')->name('showitems');
     Route::get('/details', 'ItemController@details')->name('details');
     Route::post('/addtocart', 'OrderController@stage')->name('addtocart');
-    Route::get('/cart', 'OrderController@show')->name('cart');
+    Route::get('/cart', 'OrderController@index')->name('cart');
 });
