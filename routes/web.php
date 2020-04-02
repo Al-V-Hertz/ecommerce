@@ -8,16 +8,18 @@ Route::get('/', function () {
 
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
-
-Route::get('/admin', 'AdminController@index')->name('admin');
-Route::get('/getitem', 'ItemController@index')->name('getitem');
-Route::post('/additem', 'ItemController@store')->name('additem');
-Route::get('/get', 'ItemController@get')->name('get');
-Route::post('/updateitem', "ItemController@update")->name('updateitem');
-Route::delete('/delitem', 'ItemController@destroy' )->name('delitem');
-
+Route::group(["middleware" => "App\Http\Middleware\AdminCheck"], function(){
+    Route::get('/admin', 'AdminController@index')->name('admin');
+    Route::get('/getitem', 'ItemController@index')->name('getitem');
+    Route::post('/additem', 'ItemController@store')->name('additem');
+    Route::get('/get', 'ItemController@get')->name('get');
+    Route::post('/updateitem', "ItemController@update")->name('updateitem');
+    Route::delete('/delitem', 'ItemController@destroy' )->name('delitem');
+});
+Route::group(["middleware" => "App\Http\Middleware\AdminCheck"], function(){
 // Route::get("/client", "ClientController@index")->name('client');
-Route::get('/client', 'ItemController@show')->name('showitems');
-Route::get('/details', 'ItemController@details')->name('details');
-Route::post('/addtocart', 'OrderController@stage')->name('addtocart');
-Route::get('/cart', 'OrderController@show')->name('cart');
+    Route::get('/client', 'ItemController@show')->name('showitems');
+    Route::get('/details', 'ItemController@details')->name('details');
+    Route::post('/addtocart', 'OrderController@stage')->name('addtocart');
+    Route::get('/cart', 'OrderController@show')->name('cart');
+});
