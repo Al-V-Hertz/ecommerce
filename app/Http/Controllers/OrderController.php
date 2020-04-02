@@ -20,4 +20,8 @@ class OrderController extends Controller
         // ->with("orders", compact($orders));
         return view('/cart');
     }
+
+    public function grandtotal(){
+        
+    }
 }
