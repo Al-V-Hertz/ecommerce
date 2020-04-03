@@ -26,11 +26,11 @@
                 @if(Session::has('orders'))
                 @foreach(Session::get('orders') as $order)
                     <tr>
-                        <td>{{$order['items']['item_name']}}</td>
+                        <td>{{$order['items']->item_name}}</td>
                         <td>{{$order['qty']}}</td>
-                        <td>Php {{$order['items']['item_price']}}</td>
-                        <td>Php {{$order['qty']*$order['items']['item_price'] }}</td>
-                        <?php $gtotal+=($order['qty']*$order['items']['item_price'])?>
+                        <td>Php {{$order['items']->item_price}}</td>
+                        <td>Php {{$order['qty']*$order['items']->item_price }}</td>
+                        <?php $gtotal+=($order['qty']*$order['items']->item_price)?>
                     </tr>
                 @endforeach
                 @endif

@@ -8,23 +8,28 @@ class OrderController extends Controller
 {
     public function stage(Request $request)
     {
-        
         $orders = $request->session()->get('orders');
         $id = $request->input('hidden_id');
         $item = Item::find($id);
         $qty = $request->input('qty');
-        $request->session()->push('orders', ['items' => $item, 'qty' => $qty]);
-        return redirect('/cart');
-        // dd($orders);/client');
+        if(session()->exists('orders')){
+            foreach($orders as $key=>$order){
+                if($order['id'] == $id){
+                    $qty += $order['qty'];
+                    $request->session()->forget('orders.'.$key);
+                    // unset($orders[$key]);
+                    $request->session()->push('orders', ['items' => $item, 'qty' => $qty, 'id' => $id]);
+                    return redirect('client');
+                }
+            }
+        }
+        $request->session()->push('orders', ['items' => $item, 'qty' => $qty, 'id' => $id]);
+        return redirect('client');
     }
-
+    
     public function index(Request $request){
         // $orders = $request->session()->get('orders');
-        // // dd($orders);
-        // foreach($orders as $key => $order){
-        //     dd($orders);
-        // }
-
+        // dd($orders);
         return view('/cart');
     }
 
