@@ -2,7 +2,7 @@
 @section('content')
 <div class="container">
     {{-- CHECKOUT TRIGGER --}}
-    <button class="btn btn-primary" style="margin-bottom: 10px;" data-toggle="modal" data-target="#checkout">Proceed to Checkout</button>
+    <button id="btntotal" class="btn btn-primary" style="margin-bottom: 10px;" data-toggle="modal" data-target="#checkout">Proceed to Checkout</button>
 
     {{-- CHECKOUT MODAL --}}
     <div class="modal fade" id="checkout" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -22,21 +22,23 @@
                     <th>Price</th>
                     <th>Subtotal</th>
                 </thead>
+                <?php $gtotal = 0; ?>
                 @if(Session::has('orders'))
                 @foreach(Session::get('orders') as $order)
                     <tr>
                         <td>{{$order['items']['item_name']}}</td>
                         <td>{{$order['qty']}}</td>
-                        <td>{{$order['items']['item_price']}}</td>
-                        <td>{{$order['qty']*$order['items']['item_price']}}</td>
+                        <td>Php {{$order['items']['item_price']}}</td>
+                        <td>Php {{$order['qty']*$order['items']['item_price'] }}</td>
+                        <?php $gtotal+=($order['qty']*$order['items']['item_price'])?>
                     </tr>
                 @endforeach
                 @endif
                 <tr>
-                    <td><h1>Grand Total:</h1></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td><h3>Grand Total:</h3></td>
+                    <td>-----------</td>
+                    <td>-----------></td>
+                    <td><h6 id="gtotal"><strong>Php <?php echo $gtotal?><strong></h6></td>
                 </tr>
               </table>
             </div>
@@ -77,6 +79,7 @@
     <div class="jumbotron">
         <h1>My Cart</h1>
     </div>
+    @if(Session::has('orders'))
     <table id="ordertable">
       <thead>
         <th></th>
@@ -87,20 +90,19 @@
         <th></th>
       </thead>
       <tbody>
-        @if(Session::has('orders'))
-         @foreach(Session::get('orders') as $order)
+         @foreach(Session::get('orders') as $key=>$order)
              <tr>
                  <td><img id="orderimg" src={{$order['items']['item_image']}}></td>
                  <td>{{$order['items']['item_name']}}</td>
                  <td>{{$order['qty']}}</td>
-                 <td>{{$order['items']['item_price']}}</td>
-                 <td>{{$order['qty']*$order['items']['item_price']}}</td>
-                 <td><button id="{{$order['items']['item_id']}}" class="btn btn-danger delcart">&times;</button></td>
+                 <td>Php {{$order['items']['item_price']}}</td>
+                 <td>Php {{$order['qty']*$order['items']['item_price']}}</td>
+                 <td><button id="{{$key}}" class="btn btn-danger delcart">&times;</button></td>
              </tr>
          @endforeach
-         @endif
         </tbody>
       </table>
+      @endif
 </div>
 @endsection
 @section('scripts')
@@ -110,20 +112,29 @@
             $('.delcart').click(function(){
               var cartid = this.id;
               $('#deletemodal').modal('show');
-              $('#confidel').click(function(){
+              $('#confidel').click(function(e){
+                e.preventDefault();
                 $.ajax({
                   type: 'post',
-                  url: "{{route('orderpull')}}",
+                  url: "{{ route('orderpull') }}",
                   data: {id: cartid},
-                  success: function(data){
-                    console.log("Deleted "+data);
-                    table.ajax.reload();
+                  success: function(response){
+                    console.log("Deleted "+response);
                     $('#deletemodal').modal('hide');
-                  },
-                  error: function(data){
-                  console.log(data.responseJSON.errors);
-                }
+                    window.location = response
+                  }
                 });
+              });
+            });
+            $('#btntotal').click(function(e){
+              e.preventDefault();
+              $.ajax({
+                type: 'get',
+                url: 'gettotal',
+                success: function(data){
+                  $('#gtotal').text(data);
+                  $('#checkout').modal('show');
+                }
               });
             });
         });

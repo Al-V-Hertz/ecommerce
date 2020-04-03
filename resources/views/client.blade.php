@@ -26,7 +26,7 @@
                 <p id="dettext"></p>
                 <span id="stock"></span><br><span id="price"></span><br>
                 <label id="label" for="qty">Quantity </label>
-                <input type="number" name="qty" id="qty" min="1" style='width: 55px; padding: 3px' placeholder="Qty">
+                <input type="number" name="qty" id="qty" min="1" style='width: 55px; padding: 3px' placeholder="Qty" required>
               </form>
             </div>
             <div class="modal-footer">
