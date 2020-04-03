@@ -1,9 +1,35 @@
 @extends('layouts.app')
 @section('content')
     <div class="container">
+      {{-- DELETE CONFIRMATION MODAL --}}
+      <div class="modal fade" id="deleteconfirm" tabindex="-1" role="dialog" aria-labelledby="deleteconfirm" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="deleteconfirm">Delete Confirmation</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+             <h4>
+               Are you sure you want to delete this item?
+             </h4>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button id ='findel' type="button" class="btn btn-danger">DELETE!!!</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {{-- ADD TRIGGER --}}
         <div class="header">
             <button class="btn btn-success" data-toggle="modal" data-target="#addForm">Add an Item</button>
         </div>
+
+      {{-- ADD MODAL --}}
       <div class="modal fade" id="addForm" tabindex="-1" role="dialog" aria-labelledby="addForm" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -33,11 +59,11 @@
                     </div>
                     <div class="form-group">
                       <label for="item-price">Item Price:</label>
-                      <input type="number" class="form-control" id="item-price" name="price">
+                      <input type="number" class="form-control" id="item-price" name="price" min="1">
                     </div>
                     <div class="form-group">
                       <label for="item-stock">Stock</label>
-                      <input type="number" class="form-control" id="item-stock" name="stock">
+                      <input type="number" class="form-control" id="item-stock" name="stock" min="0">
                     </div>
                   </form>
               </div>
@@ -81,11 +107,11 @@
                     </div>
                     <div class="form-group">
                       <label for="item-price">Item Price:</label>
-                      <input type="number" class="form-control" id="upd-price" name="uprice">
+                      <input type="number" class="form-control" id="upd-price" name="uprice" min="1">
                     </div>
                     <div class="form-group">
                       <label for="item-stock">Stock</label>
-                      <input type="number" class="form-control" id="upd-stock" name="ustock">
+                      <input type="number" class="form-control" id="upd-stock" name="ustock" min="0">
                     </div>
                   </form>
               </div>
@@ -135,7 +161,7 @@
             columns: [
                 {data: 'DT_RowIndex', name: 'DT_RowIndex'},
                 {data: 'item_image', name: 'timage', render: function(data, type, row){
-                  return "<img src = "+data+" width = '70', height= '70'/>";
+                  return "<img src = "+data+" width = '70', height= '70' alt='Not Found' />";
                 }},
                 {data: 'item_name', name: 'tname'},
                 {data: 'item_desc', name: 'tdesc'},
@@ -212,24 +238,28 @@
               });
               this.reset();
         });
-
         //DELETE//
-        $("#table").on('click', '.delete', function(){
+        $("#table").on('click', '.delete', function(e){
+          e.preventDefault();
           var del_id = this.id;
-          $.ajax({
-                type: 'DELETE',
+          $('#deleteconfirm').modal('show');
+          $('#findel').click(function(e){
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
                 url: "{{ route('delitem') }}",
                 data: {id: del_id},
                 success: function(data){
                   console.log("Deleted "+data);
                   table.ajax.reload();
+                  $('#deleteconfirm').modal('hide');
                 },
                 error: function(data){
                   console.log(data.responseJSON.errors);
                 }
-        })
-      });
-
+            })
+         });
+        });
       //FILE CHANGE//
         $('#img').click(function(){
           $("#item-image").click();

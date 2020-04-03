@@ -21,7 +21,7 @@ class OrderController extends Controller
         return view('/cart');
     }
 
-    public function grandtotal(){
+    // public function pull(Request $request){
         
-    }
+    // }
 }

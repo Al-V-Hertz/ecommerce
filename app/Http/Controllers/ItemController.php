@@ -82,7 +82,6 @@ class ItemController extends Controller
             unlink($del->item_image);
         }
         $del->delete();
-    
         return response()->json(['success'=>'Product deleted successfully.']);
     }
 
