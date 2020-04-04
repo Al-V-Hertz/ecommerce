@@ -67,6 +67,12 @@ section {
   height: 100px; 
   width: 100px;
 }
+.modal table{
+  width: 100%;
+}
+.modal table td{
+  padding: 5px;
+}
 #detimg{
   align-content: center;
   height: 10rem;

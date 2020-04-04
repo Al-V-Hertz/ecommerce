@@ -15,7 +15,7 @@
               </button>
             </div>
             <div class="modal-body">
-              <table style="width: 100%">
+              <table class="table-striped">
                 <thead>
                     <th>Item</th>
                     <th>Quantity</th>
@@ -24,7 +24,8 @@
                 </thead>
                 <?php $gtotal = 0; ?>
                 @if(Session::has('orders'))
-                @foreach(Session::get('orders') as $order)
+                <tbody>
+                  @foreach(Session::get('orders') as $order)
                     <tr>
                         <td>{{$order['items']->item_name}}</td>
                         <td>{{$order['qty']}}</td>
@@ -32,14 +33,18 @@
                         <td>Php {{$order['qty']*$order['items']->item_price }}</td>
                         <?php $gtotal+=($order['qty']*$order['items']->item_price)?>
                     </tr>
-                @endforeach
+                  @endforeach
+                </tbody>
                 @endif
+                {{-- <hr> --}}
+                <tfoot class="table-dark">
                 <tr>
-                    <td><h3>Grand Total:</h3></td>
-                    <td>-----------</td>
-                    <td>-----------></td>
+                    <td><h6><strong> Grand Total:</strong></h6></td>
+                    <td></td>
+                    <td></td>
                     <td><h6 id="gtotal"><strong>Php <?php echo $gtotal?><strong></h6></td>
                 </tr>
+              </tfoot>
               </table>
             </div>
             <div class="modal-footer">
@@ -80,7 +85,7 @@
         <h1>My Cart</h1>
     </div>
     @if(Session::has('orders'))
-    <table id="ordertable">
+    <table class="table-striped" id="ordertable">
       <thead>
         <th></th>
         <th>Ordered Item</th>
