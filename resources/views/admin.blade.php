@@ -125,7 +125,7 @@
       </div>
       <br>
       <div>
-          <table id="table">
+          <table id="table" class="table-striped">
             <thead>
               <th></th>
               <th>Image</th>

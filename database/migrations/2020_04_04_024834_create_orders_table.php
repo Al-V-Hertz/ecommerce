@@ -17,8 +17,10 @@ class CreateOrdersTable extends Migration
             $table->id();
             $table->int('client_id');
             $table->string('order_item');
-            $table->int('order_qty');
-            $table->float('order_tprice');
+            $table->int('order_qty');  
+            $table->float('order_cost');
+            // $table->string('transac_id');
+            // $table->boolean('order_paid');
             $table->timestamps();
         });
     }
