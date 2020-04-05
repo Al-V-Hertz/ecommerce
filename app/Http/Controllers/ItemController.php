@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use DataTables;
 class ItemController extends Controller
 {
+    //Yajra Table
     public function index(Request $request)
     {
         if ($request->ajax()) {
@@ -22,6 +23,7 @@ class ItemController extends Controller
         }
     }
 
+    //Store Item
     public function store(Request $request)
     {
             request()->validate([
@@ -50,12 +52,14 @@ class ItemController extends Controller
             }
     }
 
+    //
     public function get(Request $request)
     {
         $data = Item::find($request->id);
         return response()->json($data);
     }
 
+    //update items
     public function update(Request $request)
     {
         $updItem = Item::find($request->uid);
@@ -75,6 +79,7 @@ class ItemController extends Controller
         return "success?";
     }
 
+    //delete an item
     public function destroy(Request $request)
     {
         $del = Item::find($request->id);
@@ -91,6 +96,7 @@ class ItemController extends Controller
         return view('client', compact('cards'));
     }
     
+    //show details
     public function details(Request $request)
     {
         $det = Item::find($request->id);
