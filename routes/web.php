@@ -23,5 +23,6 @@ Route::group(["middleware" => "App\Http\Middleware\ClientCheck"], function(){
     Route::get('/cart', 'OrderController@index')->name('cart');
     Route::post('/orderpull', 'OrderController@pull')->name('orderpull');
     Route::get('/gettotal', 'OrderController@total')->name('gettotal');
-    Route::post('/addorder', 'OrderController@addorder')->name('addorder');
+    Route::get('/addorders', 'OrderController@addorders')->name('addorders');
+    Route::get('/myorders', 'OrderController@myorders')->name('myorders');
 });

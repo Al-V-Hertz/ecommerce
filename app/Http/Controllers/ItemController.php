@@ -78,10 +78,9 @@ class ItemController extends Controller
     public function destroy(Request $request)
     {
         $del = Item::find($request->id);
-        if($del->item_image){
-            unlink($del->item_image);
+        if($del->item_image || unlink($del->item_image)){
+            $del->delete();
         }
-        $del->delete();
         return response()->json(['success'=>'Product deleted successfully.']);
     }
 

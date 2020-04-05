@@ -49,7 +49,9 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button id="atc" type="submit" form="order" class="btn btn-primary">Checkout Order</button>
+              @if(Session::get('orders') != NULL)
+                <a href='/addorders' id="atc" class="btn btn-primary">Checkout Order</a>
+              @endif
             </div>
           </div>
         </div>

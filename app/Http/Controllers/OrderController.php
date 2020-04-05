@@ -1,10 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Collection;
+use Illuminate\Http\Request;
 use App\Item;
 use App\Order;
-use Illuminate\Http\Request;
-use App\Auth;
+
 class OrderController extends Controller
 {
     public function stage(Request $request)
@@ -53,7 +56,7 @@ class OrderController extends Controller
         return response()->json($total);
     }
 
-    public function addorders()
+    public function addorders(Request $request)
     {
         if(session()->exists('orders'))
         { 
@@ -67,15 +70,24 @@ class OrderController extends Controller
                 if($item->item_stock >= $order['qty'])
                 {
                     $newOrder->order_qty = $order['qty'];
-                    $item->item_stock-= $order['qty'];
-                    $newOrder->order_cost =$order['qty']*$order['items']->item_price;
+                    $item->item_stock -= $order['qty'];
+                    $newOrder->order_cost = $order['qty']*$order['items']->item_price;
                     $newOrder->save();
                     $item->save();
                 }
                 else{
-                    
+                    $error = $order['items']->item_name." stock is insufficient: ".$item->item_stock." pieces remaining. Sorry, order not added";
+                    $msgs = Arr::add($msgs, $key, $error);
                 }
             }
         }
+        // return redirect()->route('myorders')->with("messages", $msgs);
+        $request->session()->forget('orders');
+        return redirect()->route('cart');
+    }
+
+    public function myorders()
+    {
+        return view('/myorders');
     }
 }
