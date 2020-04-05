@@ -6,7 +6,7 @@
             <h1>My Orders</h1>
         </div>
         @if($myorders)
-        <table class="table-stiped" id="tblmyorders">
+        <table class="table-striped" id="tblmyorders">
             <thead>
                 <th>Image</th>
                 <th>Item</th>

@@ -2,6 +2,17 @@
 
 use Illuminate\Support\Facades\Route;
 
+
+// Delete Confirmation DONE
+// Grandtotal  DONE
+// Zero Cart Error fix DONE
+// Merge same item DONE
+
+// Proceed to Checkout  DONE
+// Ordered Items Table  (relational) DONE
+// Quantity-Stocks Restrictions DONE
+// [Optional] Automated email DONE
+
 Route::get('/', function () {
     return view('welcome');
 });

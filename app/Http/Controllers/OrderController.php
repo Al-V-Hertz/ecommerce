@@ -36,11 +36,11 @@ class OrderController extends Controller
         return redirect('client');
     }
     
-
+    //index and playground
     public function index(Request $request)
     {
-        $cou = $request->session()->get('count');
-        dd($cou);
+        // $cou = $request->session()->get('count');
+        // dd($cou);
         return view('/cart');
     }
 
