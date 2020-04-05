@@ -1,5 +1,5 @@
 @import url(https://fonts.googleapis.com/css?family=Nunito);@charset "UTF-8";
-
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
 /*!
  * Bootstrap v4.4.1 (https://getbootstrap.com/)
  * Copyright 2011-2019 The Bootstrap Authors
@@ -88,6 +88,12 @@ section {
   margin: 8px;
   height: 26rem;
   float: left;
+}
+.container .card{
+  text-align: center;
+}
+.modal{
+  text-align: center;
 }
 .card-img-top{
   height: 200px;
@@ -5513,6 +5519,9 @@ a.badge-dark.focus {
 }
 
 .jumbotron {
+  color: brown;
+  font-family: 'Pacifico', cursive;
+  border: 10px dashed brown;
   padding: 2rem 1rem;
   margin-bottom: 2rem;
   background-color: #e9ecef;

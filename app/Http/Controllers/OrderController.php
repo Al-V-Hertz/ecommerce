@@ -12,9 +12,13 @@ use App\Order;
 use App\User;
 class OrderController extends Controller
 {
+    //Add to Cart
     public function stage(Request $request)
     {
+        $count = $request->session()->get('count');
         $orders = $request->session()->get('orders');
+        $gettotal = $request->session()->get('total');
+        $ctr = 0;
         $id = $request->input('hidden_id');
         $item = Item::find($id);
         $qty = $request->input('qty');
@@ -23,23 +27,24 @@ class OrderController extends Controller
                 if($order['id'] == $id){
                     $qty += $order['qty'];
                     $request->session()->forget('orders.'.$key);
-                    // unset($orders[$key]);
-                    $request->session()->push('orders', ['items' => $item, 'qty' => $qty, 'id' => $id]);
+                    $request->session()->push('orders', ['items' => $item, 'qty' => $qty, 'id' => $id, 'subtotal' => ($qty*$item->item_price)]);
                     return redirect('client');
                 }
             }
         }
-        $request->session()->push('orders', ['items' => $item, 'qty' => $qty, 'id' => $id]);
+        $request->session()->push('orders', ['items' => $item, 'qty' => $qty, 'id' => $id, 'subtotal' => ($qty*$item->item_price)]);
         return redirect('client');
     }
     
+
     public function index(Request $request)
     {
-        // $orders = $request->session()->get('orders');
-        // dd($orders);
+        $cou = $request->session()->get('count');
+        dd($cou);
         return view('/cart');
     }
 
+    //Delete an item in cart
     public function pull(Request $request)
     {
         $orders = $request->session()->get('orders');
@@ -48,6 +53,7 @@ class OrderController extends Controller
         return '/cart';
     }
 
+    //Save all orders
     public function addorders(Request $request)
     {
         if(session()->exists('orders'))
@@ -74,8 +80,8 @@ class OrderController extends Controller
                 }
                 else{
                     $error = $order['items']->item_name.": ".$item->item_stock." pieces remaining. Sorry, order not added\n";
-                    
                     $msgs = Arr::add($msgs, $key, $error);
+                    unset($order);
                 }
                 $keyctr++;
             }
@@ -83,10 +89,13 @@ class OrderController extends Controller
                 Mail::to(Auth::user()->email)->send(new OrderMail());
             }
         }
+        $request->session()->forget('count');
+        $request->session()->forget('total');
         $request->session()->forget('orders');
         return response()->json($msgs);
     }
 
+    //Get the current users orders
     public function myorders()
     {
         $id = Auth::user()->id;
@@ -94,6 +103,7 @@ class OrderController extends Controller
         return view('/myorders')->with('myorders', $myorders->order);
     }
 
+    //Admin side : All orders
     public function allorders()
     {
         $orders = Order::all();

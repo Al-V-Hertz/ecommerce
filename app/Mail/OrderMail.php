@@ -29,8 +29,10 @@ class OrderMail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.ordermail')
-                    ->with( ['username', Auth::user()->name], ['']);
+        $username = Auth::user()->name;
+        $orders = session()->get('orders');
+        $total = session()->get('total');
+        return $this->markdown('emails.ordermail', compact('username', 'orders', 'total'));
 
     }
 }

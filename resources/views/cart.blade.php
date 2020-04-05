@@ -25,16 +25,16 @@
                     <th>Price</th>
                     <th>Subtotal</th>
                 </thead>
-                <?php $gtotal = 0; ?>
                 <tbody>
+                  <?php $total = 0;?>
                   @foreach(Session::get('orders') as $order)
                     <tr>
                         <td>{{$order['items']->item_name}}</td>
                         <td>{{$order['qty']}}</td>
                         <td>Php {{$order['items']->item_price}}</td>
-                        <td>Php {{$order['qty']*$order['items']->item_price }}</td>
-                        <?php $gtotal+=($order['qty']*$order['items']->item_price)?>
+                        <td>Php {{$order['subtotal']}}</td>
                     </tr>
+                    <?php $total +=$order['subtotal']; ?>
                   @endforeach
                 </tbody>
                 {{-- <hr> --}}
@@ -43,7 +43,7 @@
                     <td><h6><strong> Grand Total:</strong></h6></td>
                     <td></td>
                     <td></td>
-                    <td><h6 id="gtotal"><strong>Php <?php echo $gtotal?><strong></h6></td>
+                <td><h6 id="gtotal"><strong>Php {{Session::put('total', $total)}}{{Session::get('total')}}<strong></h6></td>
                 </tr>
               </tfoot>
               </table>

@@ -4,7 +4,7 @@
     <a href="/cart" class="btn btn-primary" style="margin-bottom: 10px; ">My Cart</a>
     <a href="/myorders" class="btn btn-primary" style="margin-bottom: 10px; ">My Orders</a>
   <div class="jumbotron">
-    <h2>Products</h2>
+    <h1>Products</h1>
   </div>
     <div class="modal fade" id="details" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
