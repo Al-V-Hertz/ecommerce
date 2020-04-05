@@ -1,10 +1,8 @@
 @extends('layouts.app')
 @section('content')
-{{-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-    Launch demo modal
-  </button> --}}
 <div class="container">
     <a href="/cart" class="btn btn-primary" style="margin-bottom: 10px; ">My Cart</a>
+    <a href="/myorders" class="btn btn-primary" style="margin-bottom: 10px; ">My Orders</a>
   <div class="jumbotron">
     <h2>Products</h2>
   </div>

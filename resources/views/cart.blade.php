@@ -1,7 +1,8 @@
 @extends('layouts.app')
 @section('content')
 <div class="container">
-    <div class="notifs"></div>
+    <a href={{ URL::previous() }} class="btn btn-primary" style="margin-bottom: 10px;">< Back</a>
+    {{-- <div class="notifs"></div> --}}
     {{-- CHECKOUT TRIGGER --}}
     <button class="btn btn-primary" style="margin-bottom: 10px;" data-toggle="modal" data-target="#checkout">Proceed to Checkout</button>
 

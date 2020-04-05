@@ -27,7 +27,9 @@
       {{-- ADD TRIGGER --}}
         <div class="header">
             <button class="btn btn-success" data-toggle="modal" data-target="#addForm">Add an Item</button>
+            <a href="/orders" class="btn btn-success">Orders</a>
         </div>
+      
 
       {{-- ADD MODAL --}}
       <div class="modal fade" id="addForm" tabindex="-1" role="dialog" aria-labelledby="addForm" aria-hidden="true">

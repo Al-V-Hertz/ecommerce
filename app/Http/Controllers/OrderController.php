@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
+use App\Mail\OrderMail;
 use App\Item;
 use App\Order;
 use App\User;
@@ -51,12 +53,15 @@ class OrderController extends Controller
         if(session()->exists('orders'))
         { 
             $msgs = array();
+            $orderctr = 0;
+            $keyctr = 0;
             $orders = $request->session()->get('orders');
             $newOrder = new Order();
             foreach($orders as $key=>$order)
             {
-                $newOrder->client_id = Auth::user()->id;
+                $newOrder->user_id = Auth::user()->id;
                 $newOrder->order_item = $order['items']->item_name;
+                $newOrder->order_image = $order['items']->item_image;
                 $item = Item::find($order['items']->id);
                 if($item->item_stock >= $order['qty'])
                 {
@@ -65,21 +70,33 @@ class OrderController extends Controller
                     $newOrder->order_cost = $order['qty']*$order['items']->item_price;
                     $newOrder->save();
                     $item->save();
+                    $orderctr++;
                 }
                 else{
                     $error = $order['items']->item_name.": ".$item->item_stock." pieces remaining. Sorry, order not added\n";
+                    
                     $msgs = Arr::add($msgs, $key, $error);
                 }
+                $keyctr++;
+            }
+            if($orderctr == $keyctr){
+                Mail::to(Auth::user()->email)->send(new OrderMail());
             }
         }
-        // return redirect()->route('myorders')->with("messages", $msgs);
         $request->session()->forget('orders');
         return response()->json($msgs);
     }
 
     public function myorders()
     {
-        $myorders = User::find(Auth::id())->order;
-        return view('/myorders')->with('myorders', $myorders);
+        $id = Auth::user()->id;
+        $myorders = User::find($id);
+        return view('/myorders')->with('myorders', $myorders->order);
+    }
+
+    public function allorders()
+    {
+        $orders = Order::all();
+        return view("/allorders")->with('orders', $orders);
     }
 }

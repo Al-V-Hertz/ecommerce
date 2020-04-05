@@ -63,7 +63,7 @@ nav,
 section {
   display: block;
 }
-.img img{
+.img img, #tblmyorders img, #allorders img{
   height: 100px; 
   width: 100px;
 }

@@ -15,6 +15,7 @@ Route::group(["middleware" => "App\Http\Middleware\AdminCheck"], function(){
     Route::get('/get', 'ItemController@get')->name('get');
     Route::post('/updateitem', "ItemController@update")->name('updateitem');
     Route::post('/delitem', 'ItemController@destroy' )->name('delitem');
+    Route::get('/orders', 'OrderController@allorders');
 });
 Route::group(["middleware" => "App\Http\Middleware\ClientCheck"], function(){
     Route::get('/client', 'ItemController@show')->name('showitems');
