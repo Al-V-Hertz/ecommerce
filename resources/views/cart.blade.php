@@ -1,10 +1,12 @@
 @extends('layouts.app')
 @section('content')
 <div class="container">
+    <div class="notifs"></div>
     {{-- CHECKOUT TRIGGER --}}
-    <button id="btntotal" class="btn btn-primary" style="margin-bottom: 10px;" data-toggle="modal" data-target="#checkout">Proceed to Checkout</button>
+    <button class="btn btn-primary" style="margin-bottom: 10px;" data-toggle="modal" data-target="#checkout">Proceed to Checkout</button>
 
     {{-- CHECKOUT MODAL --}}
+    @if(Session::has('orders'))
     <div class="modal fade" id="checkout" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
@@ -23,7 +25,6 @@
                     <th>Subtotal</th>
                 </thead>
                 <?php $gtotal = 0; ?>
-                @if(Session::has('orders'))
                 <tbody>
                   @foreach(Session::get('orders') as $order)
                     <tr>
@@ -35,7 +36,6 @@
                     </tr>
                   @endforeach
                 </tbody>
-                @endif
                 {{-- <hr> --}}
                 <tfoot class="table-dark">
                 <tr>
@@ -50,13 +50,13 @@
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
               @if(Session::get('orders') != NULL)
-                <a href='/addorders' id="atc" class="btn btn-primary">Checkout Order</a>
+                <button id="sendorder" type="submit" class="btn btn-primary">Checkout Order</button>
               @endif
             </div>
           </div>
         </div>
     </div>
-    
+    @endif
     {{-- CONFIRM DELETE MODAL --}}
     <div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="deletemodal" aria-hidden="true">
       <div class="modal-dialog" role="document">
@@ -133,14 +133,20 @@
                 });
               });
             });
-            $('#btntotal').click(function(e){
+            $('#sendorder').click(function(e){
               e.preventDefault();
               $.ajax({
-                type: 'get',
-                url: 'gettotal',
+                type: "get",
+                url: "addorders",
                 success: function(data){
-                  $('#gtotal').text(data);
-                  $('#checkout').modal('show');
+                  $('#checkout').modal('hide');
+                  if($.trim(data)){
+                    alert(data);
+                  }
+                  window.location.href = "/client";
+                  // $.each(data, function(key, value){
+                  //   $(".notifs").append("<div class='alert alert-danger' role='alert'>"+value+"</div>");
+                  // });
                 }
               });
             });
