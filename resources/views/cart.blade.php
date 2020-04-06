@@ -129,7 +129,7 @@
                   success: function(response){
                     console.log("Deleted "+response);
                     $('#deletemodal').modal('hide');
-                    window.location = response
+                    location.reload(true);
                   }
                 });
               });
@@ -144,7 +144,7 @@
                   if($.trim(data)){
                     alert(data);
                   }
-                  location.reload();
+                  location.reload(true);
                   // $.each(data, function(key, value){
                   //   $(".notifs").append("<div class='alert alert-danger' role='alert'>"+value+"</div>");
                   // });

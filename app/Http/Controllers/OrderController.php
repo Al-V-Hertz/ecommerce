@@ -56,7 +56,7 @@ class OrderController extends Controller
     //Save all orders
     public function addorders(Request $request)
     {
-            $msgs = array();
+            $errors = '';
             $orderctr = 0;
             $keyctr = 0;
             $orders = $request->session()->get('orders');
@@ -66,8 +66,8 @@ class OrderController extends Controller
                 $item = Item::find($order['items']->id);
                 if($item->item_stock < $order['qty'])
                 {
-                    $error = $order['items']->item_name.": ".$item->item_stock." pieces remaining. Sorry, order not added\n";
-                    $msgs = Arr::add($msgs, $key, $error);
+                    $errors .= $order['items']->item_name.": ".$item->item_stock." pieces remaining. Sorry, order not added\n";
+                    // $msgs = Arr::add($msgs, $key, $error);
                     $request->session()->forget('orders.'.$key);
                 }else{
                     $newOrder->user_id = Auth::user()->id;
@@ -83,13 +83,13 @@ class OrderController extends Controller
                 $keyctr++;
             }
             if($orderctr == $keyctr){
-                // Mail::to(Auth::user()->email)->send(new OrderMail());
+                Mail::to(Auth::user()->email)->send(new OrderMail());
                 $request->session()->forget('count');
                 $request->session()->forget('total');
                 $request->session()->forget('orders');
                 return "Thank you! We sent you a Mail";
             }
-        return response()->json($msgs);
+        return $errors;
     }
 
     //Get the current users orders
