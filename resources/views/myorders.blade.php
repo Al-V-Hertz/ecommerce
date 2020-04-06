@@ -14,7 +14,7 @@
                 <th>Amount Due</th>
             </thead>
             <tbody>
-                @foreach ($myorders as $myorder)
+                @foreach($myorders->sortByDesc('created_at') as $myorder)
                     <tr>
                         <td><img src={{$myorder->order_image}}></td>
                         <td>{{$myorder->order_item}}</td>

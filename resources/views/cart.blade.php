@@ -144,7 +144,6 @@
                   if($.trim(data)){
                     alert(data);
                   }
-                  window.location.href = "/client";
                   // $.each(data, function(key, value){
                   //   $(".notifs").append("<div class='alert alert-danger' role='alert'>"+value+"</div>");
                   // });

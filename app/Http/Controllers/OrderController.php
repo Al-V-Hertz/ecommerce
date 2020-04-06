@@ -56,8 +56,8 @@ class OrderController extends Controller
     //Save all orders
     public function addorders(Request $request)
     {
-        if(session()->exists('orders'))
-        { 
+        // if(session()->exists('orders'))
+        // { 
             $msgs = array();
             $orderctr = 0;
             $keyctr = 0;
@@ -73,33 +73,37 @@ class OrderController extends Controller
                 {
                     $error = $order['items']->item_name.": ".$item->item_stock." pieces remaining. Sorry, order not added\n";
                     $msgs = Arr::add($msgs, $key, $error);
-                    unset($order);
+                    // unset($order);
+                    $request->session()->forget('orders.'.$key);
                 }else{
                     $newOrder->order_qty = $order['qty'];
                     $item->item_stock -= $order['qty'];
-                    $newOrder->order_cost = $order['qty']*$order['items']->item_price;
-                    $newOrder->save();
                     $item->save();
+                    $newOrder->order_cost = $order['subtotal'];
                     $orderctr++;
                 }
                 $keyctr++;
+                $newOrder->save();
             }
             if($orderctr == $keyctr){
+                $msgs = 'Thank You! We sent you a mail!';
                 Mail::to(Auth::user()->email)->send(new OrderMail());
                 $request->session()->forget('count');
                 $request->session()->forget('total');
                 $request->session()->forget('orders');
+                return response()->json($msgs);
             }
-        }
+        // }
         return response()->json($msgs);
     }
 
     //Get the current users orders
     public function myorders()
     {
-        $id = Auth::user()->id;
-        $myorders = User::find($id);
-        return view('/myorders')->with('myorders', $myorders->order);
+        $user_id = Auth::user()->id;
+        $myorders = User::find($user_id);
+        // dd($myorders->orders);
+        return view('/myorders')->with('myorders', $myorders->orders);
     }
 
     //Admin side : All orders
