@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<div class="container">
+<div class="container" >
     <a href="/client" class="btn btn-primary" style="margin-bottom: 10px;">< Back</a>
     {{-- <div class="notifs"></div> --}}
     {{-- CHECKOUT TRIGGER --}}
@@ -114,13 +114,13 @@
 </div>
 @endsection
 @section('scripts')
-    <script>
+<script>
         $(document).ready(function(){
-            $('#ordertable').DataTable();
-            $('.delcart').click(function(){
-              var cartid = this.id;
-              $('#deletemodal').modal('show');
-              $('#confidel').click(function(e){
+          $('#ordertable').DataTable();
+          $('.delcart').click(function(){
+            var cartid = this.id;
+            $('#deletemodal').modal('show');
+            $('#confidel').click(function(e){
                 e.preventDefault();
                 $.ajax({
                   type: 'post',
@@ -131,9 +131,9 @@
                     $('#deletemodal').modal('hide');
                   }
                 });
-              });
-            });
-            $('#sendorder').click(function(e){
+             });
+          });
+          $('#sendorder').click(function(e){
               e.preventDefault();
               $.ajax({
                 type: "get",
