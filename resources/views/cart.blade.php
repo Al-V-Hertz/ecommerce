@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 <div class="container">
-    <a href={{ old('redirect_to', URL::previous())}} class="btn btn-primary" style="margin-bottom: 10px;">< Back</a>
+    <a href="/client" class="btn btn-primary" style="margin-bottom: 10px;">< Back</a>
     {{-- <div class="notifs"></div> --}}
     {{-- CHECKOUT TRIGGER --}}
     <button class="btn btn-primary" style="margin-bottom: 10px;" data-toggle="modal" data-target="#checkout">Proceed to Checkout</button>
@@ -129,7 +129,6 @@
                   success: function(response){
                     console.log("Deleted "+response);
                     $('#deletemodal').modal('hide');
-                    location.reload(true);
                   }
                 });
               });
@@ -145,6 +144,7 @@
                     alert(data);
                   }
                   location.reload(true);
+                  // $('#ordertable').load(location.href);
                   // $.each(data, function(key, value){
                   //   $(".notifs").append("<div class='alert alert-danger' role='alert'>"+value+"</div>");
                   // });
