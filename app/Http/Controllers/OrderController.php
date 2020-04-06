@@ -56,45 +56,40 @@ class OrderController extends Controller
     //Save all orders
     public function addorders(Request $request)
     {
-        // if(session()->exists('orders'))
-        // { 
             $msgs = array();
             $orderctr = 0;
             $keyctr = 0;
             $orders = $request->session()->get('orders');
-            $newOrder = new Order();
             foreach($orders as $key=>$order)
             {
-                $newOrder->user_id = Auth::user()->id;
-                $newOrder->order_item = $order['items']->item_name;
-                $newOrder->order_image = $order['items']->item_image;
+                $newOrder = new Order();
                 $item = Item::find($order['items']->id);
                 if($item->item_stock < $order['qty'])
                 {
                     $error = $order['items']->item_name.": ".$item->item_stock." pieces remaining. Sorry, order not added\n";
                     $msgs = Arr::add($msgs, $key, $error);
-                    // unset($order);
                     $request->session()->forget('orders.'.$key);
                 }else{
+                    $newOrder->user_id = Auth::user()->id;
+                    $newOrder->order_item = $order['items']->item_name;
+                    $newOrder->order_image = $order['items']->item_image;
                     $newOrder->order_qty = $order['qty'];
+                    $newOrder->order_cost = $order['subtotal'];
                     $item->item_stock -= $order['qty'];
                     $item->save();
-                    $newOrder->order_cost = $order['subtotal'];
+                    $newOrder->save();
                     $orderctr++;
                 }
                 $keyctr++;
-                $newOrder->save();
             }
             if($orderctr == $keyctr){
-                $msgs = 'Thank You! We sent you a mail!';
-                Mail::to(Auth::user()->email)->send(new OrderMail());
                 $request->session()->forget('count');
                 $request->session()->forget('total');
                 $request->session()->forget('orders');
+                return "Thank you! We sent you a Mail";
+            }else{
                 return response()->json($msgs);
             }
-        // }
-        return response()->json($msgs);
     }
 
     //Get the current users orders

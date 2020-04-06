@@ -1,5 +1,5 @@
 @component('mail::message')
-#Hi Customer {{$username}}, 
+# Hi Customer {{$username}}, 
 
 
 These are your orders:
@@ -15,5 +15,5 @@ These are your orders:
 We Have Received Your Order. Our man is on the move
 
 At Your Service,<br>
-##{{ config('app.name') }}
+### {{ config('app.name') }}
 @endcomponent
