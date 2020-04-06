@@ -89,12 +89,7 @@ section {
   height: 26rem;
   float: left;
 }
-.container .card{
-  text-align: center;
-}
-.modal{
-  text-align: center;
-}
+
 .card-img-top{
   height: 200px;
 }

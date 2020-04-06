@@ -69,8 +69,12 @@ class OrderController extends Controller
                 $newOrder->order_item = $order['items']->item_name;
                 $newOrder->order_image = $order['items']->item_image;
                 $item = Item::find($order['items']->id);
-                if($item->item_stock >= $order['qty'])
+                if($item->item_stock < $order['qty'])
                 {
+                    $error = $order['items']->item_name.": ".$item->item_stock." pieces remaining. Sorry, order not added\n";
+                    $msgs = Arr::add($msgs, $key, $error);
+                    unset($order);
+                }else{
                     $newOrder->order_qty = $order['qty'];
                     $item->item_stock -= $order['qty'];
                     $newOrder->order_cost = $order['qty']*$order['items']->item_price;
@@ -78,20 +82,15 @@ class OrderController extends Controller
                     $item->save();
                     $orderctr++;
                 }
-                else{
-                    $error = $order['items']->item_name.": ".$item->item_stock." pieces remaining. Sorry, order not added\n";
-                    $msgs = Arr::add($msgs, $key, $error);
-                    unset($order);
-                }
                 $keyctr++;
             }
             if($orderctr == $keyctr){
                 Mail::to(Auth::user()->email)->send(new OrderMail());
+                $request->session()->forget('count');
+                $request->session()->forget('total');
+                $request->session()->forget('orders');
             }
         }
-        $request->session()->forget('count');
-        $request->session()->forget('total');
-        $request->session()->forget('orders');
         return response()->json($msgs);
     }
 
