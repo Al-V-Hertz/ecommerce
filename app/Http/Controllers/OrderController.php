@@ -83,13 +83,13 @@ class OrderController extends Controller
                 $keyctr++;
             }
             if($orderctr == $keyctr){
+                // Mail::to(Auth::user()->email)->send(new OrderMail());
                 $request->session()->forget('count');
                 $request->session()->forget('total');
                 $request->session()->forget('orders');
                 return "Thank you! We sent you a Mail";
-            }else{
-                return response()->json($msgs);
             }
+        return response()->json($msgs);
     }
 
     //Get the current users orders
