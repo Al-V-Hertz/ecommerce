@@ -175,37 +175,30 @@
 
           //CREATE//
           $('#form').submit(function(e){
-          e.preventDefault();
-          var fd = new FormData(this);
-          $.ajax({
-                type: 'POST',
-                url: "{{ route('additem') }}",
-                data: fd,
-                cache: false,
-                processData: false,
-                contentType: false,
-                success: function(data){
-                    console.log("New item : "+data);
-                    table.ajax.reload();
-                },
-                error: function(data){
-                  console.log(data.responseJSON.errors);
-                }
-          });
+            e.preventDefault();
+            var fd = new FormData(this);
+            $.ajax({
+              type: 'post',
+              url: "{{route('additem')}}", 
+              data: fd,
+              cache: false,
+              processData: false,
+              contentType: false,
+              success: function(data){
+                console.log("New item : "+data);
+                table.ajax.reload();
+              }
+            })
           $('#img').attr('src', 'img/Add.ico');
           $('#addForm').modal('hide');
-          this.reset();
-        });
+        })
 
         //UPDATE//
         $("#table").on('click', '.edit', function(){
           // e.preventDefault();
           var edit_id = this.id;
-          $.ajax({
-                type: 'GET',
-                url: "{{ route('get') }}",
-                data: {id: edit_id},
-                success: function(data){
+          $.get("get", {id: edit_id},
+                function(data){
                     // console.log("Fetched: "+data);
                     $('#uid').val(data.id);
                     $('#uimg').attr("src", data.item_image);
@@ -214,32 +207,27 @@
                     $('#upd-price').val(data.item_price);
                     $('#upd-stock').val(data.item_stock);
                     $("#updForm").modal('show');
-                },
-                error: function(data){
-                  console.log(data.responseJSON.errors);
                 }
-            });
-        });
-        $('#upd-form').submit(function(){
-              var formData = new FormData(this);
-              $.ajax({
-                type: 'POST',
-                url: "{{route('updateitem')}}",
-                data: formData,
-                cache: false,
-                processData: false,
-                contentType: false,
-                success: function(data){
-                    window.location.href = "/admin";
-                    console.log("Updated : "+data);
-                    table.ajax.reload();
-                },
-                error: function(data){
-                  console.log(data.responseJSON.errors);
-                }
-              });
-              this.reset();
-        });
+            )
+        })
+        $('#upd-form').submit(function(e){
+          e.preventDefault();
+          var formData = new FormData(this);
+          $.ajax({
+            type: 'POST',
+            url: "{{route('updateitem')}}",
+            data: formData,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function(data){
+              console.log("Updated : "+data);
+              $("#updForm").modal('hide');
+              table.ajax.reload();
+            }
+          })
+        })
+
         //DELETE//
         $("#table").on('click', '.delete', function(e){
           e.preventDefault();
@@ -247,21 +235,17 @@
           $('#deleteconfirm').modal('show');
           $('#findel').click(function(e){
             e.preventDefault();
-            $.ajax({
-                type: 'POST',
-                url: "{{ route('delitem') }}",
-                data: {id: del_id},
-                success: function(data){
-                  console.log("Deleted "+data);
-                  table.ajax.reload();
-                  $('#deleteconfirm').modal('hide');
-                },
-                error: function(data){
-                  console.log(data.responseJSON.errors);
-                }
-            })
-         });
-        });
+            $.post("delitem", {id: del_id},
+              function(data){
+                console.log("Deleted "+data);
+                table.ajax.reload();
+                $('#deleteconfirm').modal('hide');
+              }
+            )
+          })
+        })
+
+
       //FILE CHANGE//
         $('#img').click(function(){
           $("#item-image").click();

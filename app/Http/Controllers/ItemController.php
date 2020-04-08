@@ -46,10 +46,8 @@ class ItemController extends Controller
                 $path = $des."/".$filename;
                 $newItem->item_image = $path;
                 $newItem->save();
-                return "Success";
-            }else{
-                return "Failed";
             }
+            return response()->json($newItem);
     }
 
     //
@@ -76,7 +74,7 @@ class ItemController extends Controller
         $updItem->item_price = $request->uprice;
         $updItem->item_stock = $request->ustock; 
         $updItem->save();
-        return "success?";
+        return response()->json($updItem);
     }
 
     //delete an item

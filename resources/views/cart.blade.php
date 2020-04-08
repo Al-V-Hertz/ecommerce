@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 <div class="container" >
-    <a href="/client" class="btn btn-primary" style="margin-bottom: 10px;">< Back</a>
+    <a href={{URL::previous()}} class="btn btn-primary" style="margin-bottom: 10px;">< Back</a>
     {{-- <div class="notifs"></div> --}}
     {{-- CHECKOUT TRIGGER --}}
     <button class="btn btn-primary" style="margin-bottom: 10px;" data-toggle="modal" data-target="#checkout">Proceed to Checkout</button>
@@ -87,6 +87,7 @@
     <div class="jumbotron">
         <h1>My Cart</h1>
     </div>
+   <div class="table">
     @if(Session::has('orders'))
     <table class="table-striped" id="ordertable">
       <thead>
@@ -110,47 +111,44 @@
          @endforeach
         </tbody>
       </table>
-      @endif
+    @endif
+   </div>
 </div>
 @endsection
 @section('scripts')
 <script>
         $(document).ready(function(){
           $('#ordertable').DataTable();
+          //DELETE CART
           $('.delcart').click(function(){
             var cartid = this.id;
             $('#deletemodal').modal('show');
             $('#confidel').click(function(e){
                 e.preventDefault();
-                $.ajax({
-                  type: 'post',
-                  url: "{{ route('orderpull') }}",
-                  data: {id: cartid},
-                  success: function(response){
+                $.post("orderpull", {id: cartid},
+                  function(response){
                     console.log("Deleted "+response);
                     $('#deletemodal').modal('hide');
+                    $("#"+cartid).closest("tr").remove();
                   }
-                });
-             });
-          });
+                )
+             })
+          })
+          
+          //SUBMIT CART TO ORDER
           $('#sendorder').click(function(e){
               e.preventDefault();
-              $.ajax({
-                type: "get",
-                url: "addorders",
-                success: function(data){
+              $.get("addorders",
+                function(data){
                   $('#checkout').modal('hide');
                   if($.trim(data)){
                     alert(data);
                   }
-                  location.reload(true);
-                  // $('#ordertable').load(location.href);
-                  // $.each(data, function(key, value){
-                  //   $(".notifs").append("<div class='alert alert-danger' role='alert'>"+value+"</div>");
-                  // });
+                  $(".table").remove();
+                  $(".table").load(location.href + " .table");
                 }
-              });
-            });
-        });
+              )
+          })
+        })
     </script>
 @endsection

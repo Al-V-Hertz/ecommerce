@@ -19,21 +19,21 @@ class OrderController extends Controller
         $orders = $request->session()->get('orders');
         $gettotal = $request->session()->get('total');
         $ctr = 0;
-        $id = $request->input('hidden_id');
+        $id = $request->hidden_id;
         $item = Item::find($id);
-        $qty = $request->input('qty');
+        $qty = $request->qty;
         if(session()->exists('orders')){
             foreach($orders as $key=>$order){
                 if($order['id'] == $id){
                     $qty += $order['qty'];
                     $request->session()->forget('orders.'.$key);
-                    $request->session()->push('orders', ['items' => $item, 'qty' => $qty, 'id' => $id, 'subtotal' => ($qty*$item->item_price)]);
-                    return redirect('client');
+                    $new = $request->session()->push('orders', ['items' => $item, 'qty' => $qty, 'id' => $id, 'subtotal' => ($qty*$item->item_price)]);
+                    return response()->json($new);
                 }
             }
         }
-        $request->session()->push('orders', ['items' => $item, 'qty' => $qty, 'id' => $id, 'subtotal' => ($qty*$item->item_price)]);
-        return redirect('client');
+        $new = $request->session()->push('orders', ['items' => $item, 'qty' => $qty, 'id' => $id, 'subtotal' => ($qty*$item->item_price)]);
+        return response()->json($new);
     }
     
     //index and playground
@@ -50,7 +50,6 @@ class OrderController extends Controller
         $orders = $request->session()->get('orders');
         unset($orders[$request->id]);
         session()->put('orders', $orders);
-        return '/cart';
     }
 
     //Save all orders
@@ -83,7 +82,7 @@ class OrderController extends Controller
                 $keyctr++;
             }
             if($orderctr == $keyctr){
-                Mail::to(Auth::user()->email)->send(new OrderMail());
+                // Mail::to(Auth::user()->email)->send(new OrderMail());
                 $request->session()->forget('count');
                 $request->session()->forget('total');
                 $request->session()->forget('orders');

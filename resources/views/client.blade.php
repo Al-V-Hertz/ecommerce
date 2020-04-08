@@ -16,8 +16,7 @@
               </button>
             </div>
             <div class="modal-body">
-              <form id="order" action="/addtocart" method="POST" enctype="multipart/form-data">
-                @csrf 
+              <form id="order">
                 <img id="detimg" src="" alt="Item-Image">
                 <input id="detid" type="hidden" name="hidden_id">
                 <h3 id="dettitle"></h3>
@@ -54,14 +53,12 @@
 @section('scripts')
   <script>
     $(document).ready(function(){
+      //DETAILS MODAL
       $('.detailbtn').click(function(e){
         e.preventDefault();
         var get = this.id;
-        $.ajax({
-          type: 'GET',
-          url: "{{route('details')}}",
-          data: {id: get},
-          success: function(data){
+        $.get("details", {id: get},
+          function(data){
             $('#detid').val(data.id);
             $('#detimg').attr("src", data.item_image);
             $('#dettitle').text(data.item_name);
@@ -74,15 +71,34 @@
               $('#qty').hide();
               $('#atc').hide();
             }
-          }, 
-          error: function(data){
-            console.log(data.responseJSON.errors);
           }
-        });
+        )
         $('#label').show();
         $('#qty').show();
         $('#atc').show();
-      });
-    });
+      })
+
+      //ADD TO CART
+      $("#order").submit(function(e){
+        e.preventDefault();
+        var fd = new FormData(this)
+        $.ajax({
+          type:"post",
+          url:"addtocart",
+          data: fd,
+          cache: false,
+          processData: false,
+          contentType: false,
+          success: function(data){
+            console.log("New Order: "+data)
+            $("#details").modal("hide")
+            $("#qty").val('')
+          }
+        })
+      })
+
+
+    })
+
   </script>
 @endsection
