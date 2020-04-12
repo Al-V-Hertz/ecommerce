@@ -50,7 +50,13 @@ html {
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
-
+table{
+  table-layout: fixed;
+  overflow: hidden;
+}
+td{
+  word-wrap: break-word;
+}
 article,
 aside,
 figcaption,

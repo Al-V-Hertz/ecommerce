@@ -19,6 +19,22 @@ Route::get('/', function () {
 
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::group(["middleware" => "App\Http\Middleware\SuperCheck"], function(){
+    
+    Route::get("/control", "SuperController@index")->name('control');
+    Route::get("/users", "SuperController@show")->name('users');
+    Route::post('/adduser', "SuperController@adduser")->name('adduser');
+    Route::get('/getuser/{id}', "SuperController@getuser")->name('getuser');
+    Route::get("/getpermissions/{role}", "SuperController@getpermissions")->name('getpermissions');
+    Route::get("/getroles", "SuperController@getroles")->name("getroles");
+    Route::post('/updateuser', "SuperController@updateuser")->name('updateuser');
+    Route::post("/deleteuser", "SuperController@deleteuser")->name("deleteuser");
+
+    Route::get("/roles", "RoleController@roles")->name("roles");
+    Route::get("/getroles", "RoleController@index")->name("getroles");
+});
+
 Route::group(["middleware" => "App\Http\Middleware\AdminCheck"], function(){
     Route::get('/admin', 'AdminController@index')->name('admin');
     Route::get('/getitem', 'ItemController@index')->name('getitem');
@@ -28,6 +44,7 @@ Route::group(["middleware" => "App\Http\Middleware\AdminCheck"], function(){
     Route::post('/delitem', 'ItemController@destroy' )->name('delitem');
     Route::get('/orders', 'OrderController@allorders');
 });
+
 Route::group(["middleware" => "App\Http\Middleware\ClientCheck"], function(){
     Route::get('/client', 'ItemController@show')->name('showitems');
     Route::get('/details', 'ItemController@details')->name('details');

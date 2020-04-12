@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class HomeController extends Controller
 {
@@ -18,10 +20,13 @@ class HomeController extends Controller
     
     public function index()
     {
-        if(Auth::user()->user_type == 'client'){
+        if(Auth::user()->hasRole('superadmin')){
+            return redirect('control');
+        }
+        else if(Auth::user()->hasRole('client')){
             return redirect('client');
         }
-        else if(Auth::user()->user_type == 'admin'){
+        else if(Auth::user()->hasRole('admin')){
             return redirect('admin');
         }
     }

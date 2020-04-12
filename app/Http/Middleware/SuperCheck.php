@@ -1,11 +1,13 @@
 <?php
 
 namespace App\Http\Middleware;
-use Illuminate\Support\Facades\URL;
+use App\User;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 use Auth;
 use Closure;
 
-class ClientCheck
+class SuperCheck
 {
     /**
      * Handle an incoming request.
@@ -16,11 +18,8 @@ class ClientCheck
      */
     public function handle($request, Closure $next)
     {
-        if(Auth::check()){
-            if(Auth::user()->hasRole('client')){
-                return $next($request);
-            }
+        if(Auth::user()->hasRole("superadmin")){
+            return $next($request);
         }
-        return redirect('/login'); 
     }
 }
