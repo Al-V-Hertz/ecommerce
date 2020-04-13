@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Item;
 
 class AdminController extends Controller
 {
     public function index(){
-        return view('admin');
+        $data = Item::all();
+        return view('admin', compact('data'));
     }
 }

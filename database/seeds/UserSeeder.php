@@ -15,6 +15,16 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-       //
+        $faker = Faker::create();
+        for($i=0; $i<7; $i++){
+            $client = User::create([
+                'name' => $faker->name,
+                'email' => $faker->unique()->safeEmail,
+                'password' => Hash::make('password'),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+            $client->assignRole('client');
+        }
     }
 }

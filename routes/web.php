@@ -34,14 +34,14 @@ Route::group(["middleware" => "App\Http\Middleware\SuperCheck"], function(){
     Route::get("/roles", "RoleController@index")->name("roles");
     Route::post("/addrole", "RoleController@addrole")->name("addrole");
     Route::get("/getallperm", "RoleController@getallperm")->name('getallperm');
+    Route::post("/updrole", "RoleController@updrole")->name("updrole");
     Route::get("/getrole/{id}", "RoleController@getrole")->name('getrole');
-    Route::post("/updrole", "RoleController@updrole")->name('updrole');
     Route::post("/deleterole", "RoleController@deleterole")->name('deleterole');
 });
 
 Route::group(["middleware" => "App\Http\Middleware\AdminCheck"], function(){
     Route::get('/admin', 'AdminController@index')->name('admin');
-    Route::get('/getitem', 'ItemController@index')->name('getitem');
+    // Route::get('/getitem', 'ItemController@index')->name('getitem');
     Route::post('/additem', 'ItemController@store')->name('additem');
     Route::get('/get', 'ItemController@get')->name('get');
     Route::post('/updateitem', "ItemController@update")->name('updateitem');
@@ -51,8 +51,10 @@ Route::group(["middleware" => "App\Http\Middleware\AdminCheck"], function(){
 
 Route::get('/client', 'ItemController@show')->name('showitems');
 Route::get('/details', 'ItemController@details')->name('details');
-Route::get('/myorders', 'OrderController@myorders')->name('myorders');
-Route::post('/addtocart', 'OrderController@stage')->name('addtocart');
-Route::get('/cart', 'OrderController@index')->name('cart');
-Route::post('/orderpull', 'OrderController@pull')->name('orderpull');
-Route::get('/addorders', 'OrderController@addorders')->name('addorders');
+Route::group(["middleware" => "App\Http\Middleware\ClientCheck"], function(){
+    Route::post('/addtocart', 'OrderController@stage')->name('addtocart');
+    Route::get('/cart', 'OrderController@index')->name('cart');
+    Route::post('/orderpull', 'OrderController@pull')->name('orderpull');
+    Route::get('/addorders', 'OrderController@addorders')->name('addorders');
+    Route::get('/myorders', 'OrderController@myorders')->name('myorders');
+});

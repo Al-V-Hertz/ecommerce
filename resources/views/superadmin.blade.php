@@ -39,6 +39,8 @@
         <div class="header">
             <button class="btn btn-success" data-toggle="modal" data-target="#addUser">Add User</button>
             <a href="/roles" class="btn btn-success">Roles</a>
+            <a href="/orders" class="btn btn-success">Orders</a>
+            <a href="/admin" class="btn btn-success">Admin Page</a>
         </div>
 
       {{-- ADD MODAL --}}
@@ -149,6 +151,7 @@
               <tr>
                 <th></th>
                 <th>User</th>
+                <th>Role</th>
                 <th>Email</th>
                 <th>Action</th>
               </tr>
@@ -171,6 +174,7 @@
         columns: [
           {data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
           {data: 'name', name: 'name'},
+          {data: 'roles[].name', name: 'roles[].name'},
           {data: 'email', name: 'email'},
           {data: 'action', name: 'action'},
         ]
@@ -212,7 +216,9 @@
           contentType: false, 
           success: function(response){
             console.log("Added: "+response);
-            table.ajax.reload();
+            // table.ajax.reload();
+            $("#addUser").modal('hide');
+            
           }
         });
       });
@@ -249,9 +255,6 @@
             $.each(data.roles, function(index, role){
               $('#updrole').append("<option value="+role.name+">"+role.name+"</option>");
             })
-            // $.each(data.perms, function(index, perm){
-            //   $("#permission").append("<li>"+perm.name+"</li>")
-            // })
             $("#updUser").modal('show');
             $("#updrole").change(function(){
               $("#permission li").remove();

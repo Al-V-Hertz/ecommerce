@@ -26,6 +26,7 @@
 
       {{-- ADD TRIGGER --}}
         <div class="header">
+            <a href={{URL::previous()}} class="btn btn-success"> <span><</span>Back </a>
             @can('add item')
             <button class="btn btn-success" data-toggle="modal" data-target="#addForm">Add an Item</button>
             @endcan
@@ -142,6 +143,24 @@
               <th>Action</th>
             </thead>
             <tbody>
+              @foreach($data as$key=>$item)
+                <tr>
+                  <td>{{$key+1}}</td>
+                  <td> <img src={{$item->item_image}} alt="Nod Display"></td>
+                  <td> {{$item->item_name}}</td>
+                  <td>{{$item->item_desc}}</td>
+                  <td>{{$item->item_price}}</td>
+                  <td>{{$item->item_stock}}</td>
+                  <td>
+                    @can('edit item')
+                      <button id={{$item->id}} class="btn btn-primary">Edit </button>
+                    @endcan
+                    @can('delete item')
+                    <button id={{$item->id}} class="btn btn-danger">Delete </button>
+                    @endcan
+                  </td>
+                </tr>
+              @endforeach
             </tbody>
           </table>  
         </div>
@@ -160,22 +179,7 @@
   }
     $(document).ready(function(){
           //RETRIEVE//
-          var table = $('#table').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: "{{ route('getitem') }}",
-            columns: [
-                {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-                {data: 'item_image', name: 'timage', render: function(data, type, row){
-                  return "<img src = "+data+" width = '70', height= '70' alt='Not Found' />";
-                }},
-                {data: 'item_name', name: 'tname'},
-                {data: 'item_desc', name: 'tdesc'},
-                {data: 'item_price', name: 'tprice'},
-                {data: 'item_stock', name: 'tstock'},
-                {data: 'action', name: 'action'},
-            ]
-          });
+          $('#table').DataTable();
 
           //CREATE//
           $('#form').submit(function(e){
