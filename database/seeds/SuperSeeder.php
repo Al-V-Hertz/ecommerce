@@ -21,7 +21,7 @@ class SuperSeeder extends Seeder
             'updated_at' => now(),
         ]);
         $super = Role::create(['name'=> "superadmin"]);
-        $super->givePermissionTo(['delete item', 'add item', 'view item', 'edit item']);
+        $super->givePermissionTo(['delete item', 'add item', 'view item', 'edit item', 'view order']);
         $user->assignRole('superadmin');
     }
 }

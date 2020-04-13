@@ -31,8 +31,12 @@ Route::group(["middleware" => "App\Http\Middleware\SuperCheck"], function(){
     Route::post('/updateuser', "SuperController@updateuser")->name('updateuser');
     Route::post("/deleteuser", "SuperController@deleteuser")->name("deleteuser");
 
-    Route::get("/roles", "RoleController@roles")->name("roles");
-    Route::get("/getroles", "RoleController@index")->name("getroles");
+    Route::get("/roles", "RoleController@index")->name("roles");
+    Route::post("/addrole", "RoleController@addrole")->name("addrole");
+    Route::get("/getallperm", "RoleController@getallperm")->name('getallperm');
+    Route::get("/getrole/{id}", "RoleController@getrole")->name('getrole');
+    Route::post("/updrole", "RoleController@updrole")->name('updrole');
+    Route::post("/deleterole", "RoleController@deleterole")->name('deleterole');
 });
 
 Route::group(["middleware" => "App\Http\Middleware\AdminCheck"], function(){
@@ -45,12 +49,10 @@ Route::group(["middleware" => "App\Http\Middleware\AdminCheck"], function(){
     Route::get('/orders', 'OrderController@allorders');
 });
 
-Route::group(["middleware" => "App\Http\Middleware\ClientCheck"], function(){
-    Route::get('/client', 'ItemController@show')->name('showitems');
-    Route::get('/details', 'ItemController@details')->name('details');
-    Route::post('/addtocart', 'OrderController@stage')->name('addtocart');
-    Route::get('/cart', 'OrderController@index')->name('cart');
-    Route::post('/orderpull', 'OrderController@pull')->name('orderpull');
-    Route::get('/addorders', 'OrderController@addorders')->name('addorders');
-    Route::get('/myorders', 'OrderController@myorders')->name('myorders');
-});
+Route::get('/client', 'ItemController@show')->name('showitems');
+Route::get('/details', 'ItemController@details')->name('details');
+Route::get('/myorders', 'OrderController@myorders')->name('myorders');
+Route::post('/addtocart', 'OrderController@stage')->name('addtocart');
+Route::get('/cart', 'OrderController@index')->name('cart');
+Route::post('/orderpull', 'OrderController@pull')->name('orderpull');
+Route::get('/addorders', 'OrderController@addorders')->name('addorders');

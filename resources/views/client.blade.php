@@ -1,8 +1,12 @@
 @extends('layouts.app')
 @section('content')
 <div class="container">
+  @can('order item')
     <a href="/cart" class="btn btn-primary" style="margin-bottom: 10px; ">My Cart</a>
+  @endcan
+  @can('view order')
     <a href="/myorders" class="btn btn-primary" style="margin-bottom: 10px; ">My Orders</a>
+  @endcan
   <div class="jumbotron">
     <h1>Products</h1>
   </div>
@@ -28,7 +32,9 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              @can('order item')
               <button id="atc" type="submit" form="order" class="btn btn-primary">Add to Cart</button>
+              @endcan
             </div>
           </div>
         </div>

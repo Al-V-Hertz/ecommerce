@@ -20,11 +20,12 @@ class RolePermissionSeeder extends Seeder
          Permission::create(['name' => 'delete item']);
          Permission::create(['name' => 'add item']);
          Permission::create(['name' => 'view item']);
+         Permission::create(['name' => 'view order']);
 
          $admin = Role::create(['name' => 'admin']);
-         $admin->givePermissionTo(['delete item', 'add item', 'view item', 'edit item']);
+         $admin->givePermissionTo(['delete item', 'add item', 'view item', 'edit item', 'view order']);
          Permission::create(['name' => 'order item']);
          $client = Role::create(["name" => 'client']);
-         $client->givePermissionTo('order item');
+         $client->givePermissionTo(['order item', 'view order']);
     }
 }

@@ -23,11 +23,11 @@ class HomeController extends Controller
         if(Auth::user()->hasRole('superadmin')){
             return redirect('control');
         }
-        else if(Auth::user()->hasRole('client')){
-            return redirect('client');
-        }
         else if(Auth::user()->hasRole('admin')){
             return redirect('admin');
+        }
+        else{
+            return redirect('client');
         }
     }
 }

@@ -14,8 +14,8 @@ class ItemController extends Controller
             return Datatables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
-                           $btn ="<button id = '$row->id' class='btn btn-primary edit'>Edit</button>";
-                           $btn= $btn."  <button id='$row->id' class='btn btn-danger delete'>Delete</button>";
+                           $btn ="@can('edit item')<button id = '$row->id' class='btn btn-primary edit'>Edit</button>@endcan";
+                           $btn= $btn."  @can('delete item')<button id='$row->id' class='btn btn-danger delete'>Delete</button>@endcan";
                            return $btn;
                     })
                     ->rawColumns(['action'])

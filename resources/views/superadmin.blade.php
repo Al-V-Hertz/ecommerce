@@ -1,6 +1,17 @@
 @extends('layouts.app')
 @section('content')
     <div class="container">
+
+          @if ($errors->any())
+            <div class="alert alert-danger">
+                <strong>Error!</strong> Something's Wrong<br><br>
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+         @endif
       {{-- DELETE CONFIRMATION MODAL --}}
       <div class="modal fade" id="deleteconfirm" tabindex="-1" role="dialog" aria-labelledby="deleteconfirm" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -87,7 +98,7 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="updForm">Update Item</h5>
+              <h5 class="modal-title" id="updForm">Update User</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -238,9 +249,9 @@
             $.each(data.roles, function(index, role){
               $('#updrole').append("<option value="+role.name+">"+role.name+"</option>");
             })
-            $.each(data.perms, function(index, perm){
-              $("#permission").append("<li>"+perm.name+"</li>")
-            })
+            // $.each(data.perms, function(index, perm){
+            //   $("#permission").append("<li>"+perm.name+"</li>")
+            // })
             $("#updUser").modal('show');
             $("#updrole").change(function(){
               $("#permission li").remove();
@@ -251,7 +262,6 @@
               })
             })
           })
-
       })
 
       //update-submit
@@ -271,7 +281,7 @@
               table.ajax.reload();
             }
           })
-        })
+       })
     })
 </script>
 @endsection

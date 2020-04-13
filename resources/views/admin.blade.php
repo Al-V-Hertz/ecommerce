@@ -26,8 +26,12 @@
 
       {{-- ADD TRIGGER --}}
         <div class="header">
+            @can('add item')
             <button class="btn btn-success" data-toggle="modal" data-target="#addForm">Add an Item</button>
+            @endcan
+            @can('view order')
             <a href="/orders" class="btn btn-success">Orders</a>
+            @endcan
         </div>
       
 

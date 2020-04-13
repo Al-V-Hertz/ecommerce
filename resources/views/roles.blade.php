@@ -1,6 +1,17 @@
  @extends('layouts.app')
  @section('content')
     <div class="container">
+
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <strong>Error!</strong> Something's Wrong<br><br>
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+         @endif
          {{-- delete ocnfirmation modal --}}
         <div class="modal fade" id="deleteconfirm" tabindex="-1" role="dialog" aria-labelledby="deleteconfirm" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -24,7 +35,7 @@
 
          {{-- ADD TRIGGER --}}
          <div class="header">
-             <a href={{URL::previous()}} class="btn btn-success"> <span><</span> Back </a>
+             <a href="/control" class="btn btn-success"> <span><</span> Back </a>
             <button class="btn btn-success" data-toggle="modal" data-target="#addRole">Add Role</button>
         </div>
         
@@ -45,11 +56,9 @@
                       <label for="addname">Role</label>
                       <input type="text" class="form-control" id="addname" name="addname" required>
                     </div>
-                    <div class="form-group">
-                      <label for="existingpm">Permission/s</label>
-                      <ul id="existingpm">
-
-                      </ul>
+                    <div  id="cbox" class="form-group">
+                      <label>Permissions</label>
+                      
                     </div>
                   </form>
               </div>
@@ -67,53 +76,37 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="updForm">Update Item</h5>
+              <h5 class="modal-title" id="updRole">Edit Role</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
               <div id="updRole">
-                <form id="upd-form" enctype="multipart/form-data">
+                <form id="updForm" enctype="multipart/form-data">
                     <div class="form-group">
-                      <input type="hidden" class="form-control" id="updid" name="updid">
-                      <label for="updname">User Name:</label>
-                      <input type="text" class="form-control" id="updname" name="updname">
+                      <label for="updrolename">Role</label>
+                      <input type="hidden" id="updid" name="updid">
+                      <input type="text" class="form-control" id="updrolename" name="updrolename" required>
                     </div>
-                    <div class="form-group">
-                      <label for="updemail">Email</label>
-                      <input type="text" class="form-control" id="updemail" name="updemail">
-                    </div>
-                    <div class="form-group">
-                      <label for="updpassword">Password</label>
-                      <input type="password" class="form-control" id="updpassword" name="updpassword" placeholder="Change Password?">
-                    </div>
-                    <div class="form-group">
-                      <label for="updrole">Role</label>
-                      <select class="form-control" id="updrole" name="updrole">
-                        
-                      </select>
-                    </div>
-                    <div class="form-group">
-                      <label for="permission">Permission/s</label>
-                      <ul id="permission">
-
-                      </ul>
+                    <div id="updcbox" class="form-group">
+                      <label>Permissions</label>
+                      {{-- loop goes here --}}
                     </div>
                   </form>
               </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-success" form="upd-form" id="btn-update">Update</button>
+              <button type="submit" class="btn btn-success" form="updForm" id="btn-upd">Submit</button>
             </div>
           </div>
         </div>
       </div>
       <br>
       <br>
-       <div>
-          <table id="usertable" class="table-striped">
+       <div class="table">
+          <table id="roletable" class="table-striped">
             <thead>
               <tr>
                 <th></th>
@@ -123,7 +116,23 @@
               </tr>
             </thead>
             <tbody>
-              
+              @foreach($data as $key => $role)
+                <tr>
+                    <td>{{$key+1}}</td>
+                    <td>{{$role->name}}</td>
+                    <td>
+                        <ul>
+                            @foreach($role->permissions as $pm)
+                                <li>{{$pm->name}}</li>
+                            @endforeach
+                        </ul> 
+                    </td>
+                    <td>
+                        <button id={{$role->id}} class="btn btn-primary editrole">Edit</button>
+                        <button id={{$role->id}} class="btn btn-danger delrole">Delete</button>
+                    </td>
+                </tr>
+              @endforeach
             </tbody>
           </table>  
         </div>
@@ -133,18 +142,90 @@
  @section('scripts')
  <script>
      $(document).ready(function(){
-        var table = $('#usertable').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: "{{ route('getroles') }}",
-        columns: [
-          {data: 'DT_RowIndex', name: 'DT_RowIndex' , orderable: false, searchable: false},
-          {data: 'name', name: 'name'},
-          {data: 'permissions', name: 'permissions'},
-          {data: 'action', name: 'action'},
-        ]
-      })
-     })
+        var table = $('#roletable').DataTable();
+         $.get("getallperm", function(data){
+             $.each(data, function(i, v){
+                 $("#cbox").append("<div class='checkbox'><label> <input type='checkbox' value="+v.id+">"+v.name+"</label></div>")
+             })
+         })
+
+         //create
+         $("#addForm").submit(function(e){
+             e.preventDefault();
+            var role = $("#addname").val(); 
+            var pm = [];
+            $(":checkbox:checked").each(function(i){
+                pm[i] = $(this).val();
+            });
+            $.ajax({
+                type: 'post',
+                url: "{{route('addrole')}}", 
+                data: {role: role, pm: pm},
+                success: function(data){
+                    console.log(data)
+                    $("#addRole").modal("hide");
+                    location.reload();
+                }
+            })
+         })
+
+         //delete role
+         $("table").on("click", ".delrole", function(e){
+          e.preventDefault();
+          var del_id = this.id;
+          $('#deleteconfirm').modal('show');
+          $('#findel').click(function(){
+            $.post("deleterole", {id: del_id},
+              function(data){
+                console.log("Deleted "+data);
+                $("#"+del_id).closest("tr").remove();
+                $("#deleteconfirm").modal("hide");
+              }
+            )
+          })
+        })
+
+        // edit- retrieve
+        $("table").on("click", ".editrole", function(e){
+          e.preventDefault();
+          var i = this.id;
+            $.get("getrole/"+i, function(data){
+                $('#updcbox div').remove();
+                $("#updrolename").val(data.role.name);
+                $("#updid").val(i);
+                $.each(data.allperm, function(i, v){
+                    $("#updcbox").append("<div class='checkbox'><label> <input id="+v.id+" type='checkbox' value="+v.id+">"+v.name+"</label></div>");
+                })
+                $.each(data.perm, function(x, y){
+                    $("#"+y.id).prop('checked', true);
+                })
+            $("#updRole").modal('show');
+            })
+        })
+
+        $("#updForm").submit(function(e){
+            e.preventDefault();
+            var name = $("#updrolename").val();
+            var id = $("#updid").val(); 
+            var upm = [];
+            $(":checkbox:checked").each(function(i){
+                upm[i] = $(this).val();
+            });
+            // alert(id)
+            // alert(name)
+            // alert(upm)
+            $.ajax({
+                type: 'post',
+                url: "{{route('updrole')}}", 
+                data: {id: id, pm: upm, name: name},
+                success: function(data){
+                    console.log(data)
+                    $("#updRole").modal("hide");
+                    location.reload();
+                }
+            })
+        })
+    })
  </script>
      
  @endsection
