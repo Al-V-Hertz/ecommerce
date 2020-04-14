@@ -283,7 +283,8 @@
             success: function(data){
               console.log("Updated : "+data);
               $("#updUser").modal('hide');
-              table.ajax.reload();
+              $('form').trigger('reset');
+              // table.ajax.reload();
             }
           })
        })

@@ -164,6 +164,7 @@
                 success: function(data){
                     console.log(data)
                     $("#addRole").modal("hide");
+                    $('form').trigger('reset')
                     location.reload();
                 }
             })
@@ -203,6 +204,7 @@
             })
         })
 
+        // edit - submit
         $("#updForm").submit(function(e){
             e.preventDefault();
             var name = $("#updrolename").val();
@@ -211,9 +213,6 @@
             $(":checkbox:checked").each(function(i){
                 upm[i] = $(this).val();
             });
-            // alert(id)
-            // alert(name)
-            // alert(upm)
             $.ajax({
                 type: 'post',
                 url: "{{route('updrole')}}", 

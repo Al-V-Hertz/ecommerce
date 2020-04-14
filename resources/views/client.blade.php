@@ -100,7 +100,7 @@
           success: function(data){
             console.log("New Order: "+data)
             $("#details").modal("hide")
-            $("#qty").val('')
+            $('form').trigger('reset')
           }
         })
       })

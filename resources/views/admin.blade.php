@@ -147,7 +147,7 @@
             <tbody>
               @foreach($data as$key=>$item)
                 <tr>
-                  <td>{{$key+1}}</td>
+                  <td class="keynum">{{$key+1}}</td>
                   <td> <img src={{$item->item_image}} alt="Nod Display"></td>
                   <td> {{$item->item_name}}</td>
                   <td>{{$item->item_desc}}</td>
@@ -195,8 +195,11 @@
               processData: false,
               contentType: false,
               success: function(data){
-                console.log("New item : "+data);
-                location.reload();
+                console.log("New item : "+data.item_name);
+                $('form').trigger('reset')
+                var key = parseInt($('.keynum').last().text())+1;
+                $('tbody').append("<tr><td class='keynum'>"+key+"</td><td> <img src="+data.item_image+" alt='Nod Display'></td><td>"+data.item_name+"</td><td>"+data.item_desc+"</td><td>"+data.item_price+"</td><td>"+data.item_stock+"</td><td><button id="+data.id+" class='btn btn-primary edit'>Edit</button>  <button id"+data.id+" class='btn btn-danger delete'>Delete</button></td></tr>")
+                // location.reload();
               }
             })
           $('#img').attr('src', 'img/Add.ico');

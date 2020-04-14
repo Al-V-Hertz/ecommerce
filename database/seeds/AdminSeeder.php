@@ -16,7 +16,7 @@ class AdminSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create();
-        for($i=0; $i<7; $i++){
+        for($i=0; $i<5; $i++){
             $admin = User::create([
                 'name' => $faker->name,
                 'email' => $faker->unique()->safeEmail,
