@@ -221,6 +221,7 @@
                 success: function(data){
                     console.log(data)
                     $("#updRole").modal("hide");
+                    $('form').trigger('reset');
                     location.reload();
                 }
             })

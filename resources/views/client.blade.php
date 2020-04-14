@@ -4,7 +4,7 @@
   @can('order item')
     <a href="/cart" class="btn btn-primary" style="margin-bottom: 10px; ">My Cart</a>
   @endcan
-  @can('view order')
+  @can('view order', 'order item')
     <a href="/myorders" class="btn btn-primary" style="margin-bottom: 10px; ">My Orders</a>
   @endcan
   <div class="jumbotron">
@@ -26,8 +26,10 @@
                 <h3 id="dettitle"></h3>
                 <p id="dettext"></p>
                 <span id="stock"></span><br><span id="price"></span><br>
+                @can('order item')
                 <label id="label" for="qty">Quantity </label>
                 <input type="number" name="qty" id="qty" min="1" style='width: 55px; padding: 3px' placeholder="Qty" required>
+                @endcan
               </form>
             </div>
             <div class="modal-footer">

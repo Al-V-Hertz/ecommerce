@@ -6,23 +6,6 @@ use Illuminate\Http\Request;
 use DataTables;
 class ItemController extends Controller
 {
-    //Yajra Table
-    // public function index(Request $request)
-    // {
-    //     if ($request->ajax()) {
-    //         $data = Item::all();
-    //         return Datatables::of($data)
-    //                 ->addIndexColumn()
-    //                 ->addColumn('action', function($row){
-    //                        $btn = "<button id = '$row->id' class='btn btn-primary edit'>Edit</button>";
-    //                        $btn= $btn."  <button id='$row->id' class='btn btn-danger delete'>Delete</button>";
-    //                        return $btn;
-    //                 })
-    //                 ->rawColumns(['action'])
-    //                 ->make(true);
-    //     }
-    // }
-
     //Store Item
     public function store(Request $request)
     {

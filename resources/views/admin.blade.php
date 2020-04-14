@@ -26,10 +26,12 @@
 
       {{-- ADD TRIGGER --}}
         <div class="header">
-            <a href={{URL::previous()}} class="btn btn-success"> <span><</span>Back </a>
-            @can('add item')
+            @role('superadmin')
+            <a href='/control' class="btn btn-success"> <span><</span>Back </a>
+            @endrole
+            {{-- @can('add item') --}}
             <button class="btn btn-success" data-toggle="modal" data-target="#addForm">Add an Item</button>
-            @endcan
+            {{-- @endcan --}}
             @can('view order')
             <a href="/orders" class="btn btn-success">Orders</a>
             @endcan
@@ -131,7 +133,7 @@
         </div>
       </div>
       <br>
-      <div>
+      <div class="table">
           <table id="table" class="table-striped">
             <thead>
               <th></th>
@@ -153,10 +155,10 @@
                   <td>{{$item->item_stock}}</td>
                   <td>
                     @can('edit item')
-                      <button id={{$item->id}} class="btn btn-primary">Edit </button>
+                      <button id={{$item->id}} class="btn btn-primary edit">Edit </button>
                     @endcan
                     @can('delete item')
-                    <button id={{$item->id}} class="btn btn-danger">Delete </button>
+                    <button id={{$item->id}} class="btn btn-danger delete">Delete </button>
                     @endcan
                   </td>
                 </tr>
@@ -194,7 +196,7 @@
               contentType: false,
               success: function(data){
                 console.log("New item : "+data);
-                table.ajax.reload();
+                location.reload();
               }
             })
           $('#img').attr('src', 'img/Add.ico');
@@ -231,7 +233,8 @@
             success: function(data){
               console.log("Updated : "+data);
               $("#updForm").modal('hide');
-              table.ajax.reload();
+              $('form').trigger('reset');
+              location.reload();
             }
           })
         })
@@ -246,7 +249,7 @@
             $.post("delitem", {id: del_id},
               function(data){
                 console.log("Deleted "+data);
-                table.ajax.reload();
+                $('#'+del_id).closest('tr').remove();
                 $('#deleteconfirm').modal('hide');
               }
             )

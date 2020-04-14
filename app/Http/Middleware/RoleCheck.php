@@ -1,12 +1,12 @@
 <?php
 
 namespace App\Http\Middleware;
-use Illuminate\Support\Facades\URL;
-use Auth;
-use Closure;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-class AdminCheck
+use Closure;
+use Auth;
+
+class RoleCheck
 {
     /**
      * Handle an incoming request.
@@ -16,12 +16,12 @@ class AdminCheck
      * @return mixed
      */
     public function handle($request, Closure $next)
-    {   
+    {
         if(Auth::check()){
-            if(Auth::user()->can('view item') || Auth::user()->can('order item')){
+            if(Auth::user()->hasanyrole(Role::all()->pluck('name')->flatten())){
                 return $next($request);
             }
         }
-        return redirect('/login'); 
+        return $next($request);
     }
 }

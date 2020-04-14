@@ -70,7 +70,7 @@ class SuperController extends Controller
         $updUser = User::with('roles')->where("id", $request->updid)->first();
         $updUser->name = $request->updname;
         $updUser->email = $request->updemail;
-        $updUser->password = Hash::make($request->updpassword);
+        $updUser->password?Hash::make($request->updpassword):Null;
         $updUser->removeRole($updUser->roles[0]->name);
         $updUser->assignRole($request->updrole);
         $updUser->save();

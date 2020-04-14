@@ -216,9 +216,9 @@
           contentType: false, 
           success: function(response){
             console.log("Added: "+response);
-            // table.ajax.reload();
             $("#addUser").modal('hide');
-            
+            $('form').trigger('reset');
+            location.reload();
           }
         });
       });
@@ -256,15 +256,17 @@
               $('#updrole').append("<option value="+role.name+">"+role.name+"</option>");
             })
             $("#updUser").modal('show');
-            $("#updrole").change(function(){
-              $("#permission li").remove();
-              $.get("getpermissions/"+$("#updrole").val(), function(data){
-                $.each(data.pm, function(index, pemi){
-                  $("#permission").append("<li>"+pemi.name+"</li>")
-                })
-              })
-            })
           })
+      })
+
+       //update-every time role-selection change...
+       $("#updrole").change(function(){
+        $("#permission li").remove();
+        $.get("getpermissions/"+$("#updrole").val(), function(data){
+          $.each(data.pm, function(index, pemi){
+            $("#permission").append("<li>"+pemi.name+"</li>")
+          })
+        })
       })
 
       //update-submit

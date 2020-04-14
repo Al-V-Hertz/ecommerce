@@ -4,7 +4,8 @@ namespace App\Http\Middleware;
 use Illuminate\Support\Facades\URL;
 use Auth;
 use Closure;
-
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 class ClientCheck
 {
     /**
@@ -17,7 +18,7 @@ class ClientCheck
     public function handle($request, Closure $next)
     {
         if(Auth::check()){
-            if(Auth::user()->hasRole('client')){
+            if(Auth::user()->can('order item')){
                 return $next($request);
             }
         }
